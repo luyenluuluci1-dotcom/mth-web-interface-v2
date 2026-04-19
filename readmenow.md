@@ -1,0 +1,1 @@
+Dự án này được lập ra nhằm mục đích thiết kế website cho Mai Trinh Hồ - một KOL trong mảng beauty. Ban đầu sẽ sử dụng công cụ awesome-design-md trên github để sao chép hoàn hảo một website mẫu nào đó, và thiết kế website cho Mai Trinh Hồ giống như vậy. Đây là dự tính ban đầu, nếu có thay đổi cập nhật sẽ bổ sung sau.
