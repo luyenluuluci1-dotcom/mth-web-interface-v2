@@ -46,3 +46,12 @@
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
+
+/* Mobile touch-friendly buttons */
+@media (max-width: 768px) {
+  .btn {
+    min-height: 44px; /* WCAG minimum touch target */
+    padding: 0.7rem 1.75rem;
+    font-size: var(--font-size-xs);
+  }
+}

@@ -1,0 +1,376 @@
+/* ==========================================================================
+   INNER PAGE — SHARED STYLES
+   Dùng chung cho tất cả trang con (Ưu đãi, Sản phẩm, Blog...)
+   ========================================================================== */
+
+/* 1. Page Hero — Mini Banner (nhỏ hơn hero trang chủ) */
+.page-hero {
+  position: relative;
+  width: 100%;
+  min-height: 220px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--color-slate-900) 0%, #2d1b2e 50%, #1a0a0a 100%);
+}
+
+.page-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.page-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.25;
+}
+
+.page-hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 3rem 0 2.5rem;
+}
+
+.page-hero-badge {
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 2px;
+  background-color: var(--color-primary);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.page-hero-title {
+  font-size: var(--font-size-4xl);
+  color: #fff;
+  font-family: var(--font-family-heading);
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+
+.page-hero-subtitle {
+  font-size: var(--font-size-base);
+  color: var(--color-slate-400);
+  max-width: 560px;
+  line-height: 1.6;
+}
+
+/* 2. Breadcrumb */
+.breadcrumb {
+  padding: 1rem 0;
+  background-color: var(--color-slate-50);
+  border-bottom: 1px solid var(--color-slate-200);
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.breadcrumb-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--font-size-sm);
+  color: var(--color-slate-400);
+}
+
+.breadcrumb-list li:last-child {
+  color: var(--color-slate-900);
+  font-weight: var(--font-weight-medium);
+}
+
+.breadcrumb-list a {
+  color: var(--color-slate-400);
+  transition: color var(--transition-fast);
+}
+
+.breadcrumb-list a:hover {
+  color: var(--color-primary);
+}
+
+.breadcrumb-separator {
+  font-size: 10px;
+  color: var(--color-slate-400);
+}
+
+/* 3. Page Body Layout */
+.inner-page-body {
+  padding: 3rem 0 5rem;
+  background-color: var(--color-bg-base);
+}
+
+/* 4. Section Anchor Headers */
+.deal-section {
+  margin-bottom: 4rem;
+}
+
+.deal-section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--color-slate-200);
+}
+
+.deal-section-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.deal-section-title {
+  font-size: var(--font-size-2xl);
+  color: var(--color-slate-900);
+  margin: 0;
+}
+
+.deal-section-count {
+  margin-left: auto;
+  font-size: var(--font-size-sm);
+  color: var(--color-slate-400);
+  white-space: nowrap;
+}
+
+/* 5. Deal Cards Grid */
+.deal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* 6. Deal Card */
+.deal-card {
+  background: #fff;
+  border: 1px solid var(--color-slate-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.deal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.deal-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background-color: var(--color-slate-50);
+}
+
+.deal-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-flow);
+}
+
+.deal-card:hover .deal-card-image {
+  transform: scale(1.06);
+}
+
+/* Deal badge (Countdown / Tag) */
+.deal-card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(135deg, #D32F2F, #FF5252);
+  color: #fff;
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.deal-card-badge.badge-voucher {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+}
+
+.deal-card-badge.badge-combo {
+  background: linear-gradient(135deg, #2E7D32, #4CAF50);
+}
+
+.deal-card-body {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.deal-card-vendor {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-slate-400);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.deal-card-title {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-slate-900);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
+}
+
+.deal-card-desc {
+  font-size: var(--font-size-xs);
+  color: var(--color-slate-600);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.deal-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--color-slate-200);
+  background-color: var(--color-slate-50);
+}
+
+.deal-price-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.deal-price-original {
+  font-size: 11px;
+  color: var(--color-slate-400);
+  text-decoration: line-through;
+}
+
+.deal-price-current {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.deal-discount-tag {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+}
+
+/* 7. Countdown Timer (for Flash Sale) */
+.deal-countdown {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.deal-countdown-label {
+  font-size: 10px;
+  color: var(--color-slate-400);
+  font-weight: var(--font-weight-medium);
+}
+
+.deal-countdown-timer {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.countdown-block {
+  background-color: var(--color-slate-900);
+  color: #fff;
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px 5px;
+  border-radius: 3px;
+  min-width: 22px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-colon {
+  color: var(--color-slate-900);
+  font-weight: var(--font-weight-bold);
+  font-size: 11px;
+}
+
+/* 8. Empty State */
+.inner-page-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-slate-400);
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE FIRST
+   ============================================================ */
+@media (max-width: 1024px) {
+  .deal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .page-hero {
+    min-height: 160px;
+  }
+  .page-hero-title {
+    font-size: var(--font-size-3xl);
+  }
+  .page-hero-content {
+    padding: 2rem 0 1.5rem;
+  }
+  .inner-page-body {
+    padding: 2rem 0 3rem;
+  }
+  .deal-section-header {
+    margin-bottom: 1.25rem;
+  }
+  .deal-section-title {
+    font-size: var(--font-size-xl);
+  }
+}
+
+@media (max-width: 640px) {
+  .deal-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .deal-card-image-wrapper {
+    aspect-ratio: 16 / 7;
+  }
+  .page-hero-badge {
+    display: none; /* Ẩn trên màn hình cực nhỏ */
+  }
+  .page-hero-subtitle {
+    font-size: var(--font-size-sm);
+  }
+}

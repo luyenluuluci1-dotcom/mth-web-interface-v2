@@ -30,16 +30,52 @@
 
     <!-- Thanh Điều Hướng Chính (Navbar) -->
     <nav class="navbar container">
+      <!-- 0. Mobile Hamburger Toggle -->
+      <button class="mobile-menu-toggle" aria-label="Mở menu" id="mobile-menu-toggle">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
       <!-- 1. Cụm Logo (Trái) -->
       <div class="navbar-logo">
-        <a href="#">MAI TRINH HỒ</a>
+        <a href="/">MAI TRINH HỒ</a>
       </div>
       
       <!-- 2. Menu Center (Giữa) -->
       <ul class="navbar-menu">
-        <li><a href="#" class="nav-link">CHƯƠNG TRÌNH<br>YÊU THÍCH</a></li>
-        <li><a href="#" class="nav-link">THƯƠNG HIỆU<br>LỰA CHỌN</a></li>
-        <li><a href="#" class="nav-link">GÓC CHĂM SÓC<br>LÀN DA</a></li>
+        <li class="nav-item-dropdown">
+          <a href="/uu-dai-theo-chuong-trinh/" class="nav-link">ƯU ĐÃI<br>THEO CHƯƠNG TRÌNH</a>
+          <ul class="dropdown-menu">
+            <li><a href="/uu-dai-theo-chuong-trinh/#flash-sale" class="dropdown-link">Flash Sale</a></li>
+            <li><a href="/uu-dai-theo-chuong-trinh/#voucher" class="dropdown-link">Voucher & Mã giảm giá</a></li>
+            <li><a href="/uu-dai-theo-chuong-trinh/#combo" class="dropdown-link">Combo Tiết Kiệm</a></li>
+          </ul>
+        </li>
+        <li class="nav-item-dropdown">
+          <a href="/uu-dai-theo-thuong-hieu/" class="nav-link">ƯU ĐÃI<br>THEO THƯƠNG HIỆU</a>
+          <ul class="dropdown-menu">
+            <li><a href="#" class="dropdown-link">Text 1</a></li>
+            <li><a href="#" class="dropdown-link">Text 2</a></li>
+            <li><a href="#" class="dropdown-link">Text 3</a></li>
+          </ul>
+        </li>
+        <li class="nav-item-dropdown">
+          <a href="/san-pham-theo-nhu-cau/" class="nav-link">SẢN PHẨM<br>THEO NHU CẦU</a>
+          <ul class="dropdown-menu">
+            <li><a href="#" class="dropdown-link">Text 1</a></li>
+            <li><a href="#" class="dropdown-link">Text 2</a></li>
+            <li><a href="#" class="dropdown-link">Text 3</a></li>
+          </ul>
+        </li>
+        <li class="nav-item-dropdown">
+          <a href="/blog/" class="nav-link" style="display: flex; align-items: center; height: 100%;">BLOG</a>
+          <ul class="dropdown-menu">
+            <li><a href="#" class="dropdown-link">Text 1</a></li>
+            <li><a href="#" class="dropdown-link">Text 2</a></li>
+            <li><a href="#" class="dropdown-link">Text 3</a></li>
+          </ul>
+        </li>
       </ul>
 
       <!-- 3. Icon Chức Năng & Mạng Xã Hội (Phải) -->
@@ -77,6 +113,8 @@
         </button>
       </div>
     </nav>
+    <!-- Mobile Overlay (Backdrop khi mở drawer) -->
+    <div class="mobile-overlay" id="mobile-overlay"></div>
   </header>
 
   <main>

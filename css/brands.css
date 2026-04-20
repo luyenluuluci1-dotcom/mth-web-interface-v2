@@ -57,10 +57,32 @@
 }
 
 @media (max-width: 768px) {
+  .brands-section {
+    padding: 2.5rem 0;
+  }
+  .brands-container {
+    gap: 1.5rem;
+  }
   .brands-grid {
-    gap: 2.5rem;
+    gap: 2rem;
   }
   .brand-item {
     max-width: 100px;
+    /* On mobile, show items with some color for engagement */
+    opacity: 0.6;
+    filter: grayscale(0.5);
+  }
+}
+
+@media (max-width: 480px) {
+  .brands-grid {
+    gap: 1.5rem;
+  }
+  .brand-item {
+    max-width: 75px;
+  }
+  .brands-title {
+    font-size: 10px;
+    letter-spacing: 0.15rem;
   }
 }
