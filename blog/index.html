@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog Làm Đẹp | MTH Beauty</title>
+  <meta name="description" content="Góc chia sẻ làm đẹp của Mai Trinh Hồ: skincare tips, makeup trend và wellness — kiến thức thực chiến từ chuyên gia.">
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/header.css">
+  <link rel="stylesheet" href="../css/buttons.css">
+  <link rel="stylesheet" href="../css/footer.css">
+  <link rel="stylesheet" href="../css/inner-page.css">
+  <style>
+    /* Blog-specific overrides */
+    .blog-inner-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .blog-inner-card {
+      background: #fff;
+      border: 1px solid var(--color-slate-200);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform var(--transition-base), box-shadow var(--transition-base);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+    .blog-inner-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .blog-inner-image-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+    }
+    .blog-inner-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-flow);
+    }
+    .blog-inner-card:hover .blog-inner-image {
+      transform: scale(1.06);
+    }
+    .blog-inner-category {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+      color: #fff;
+      font-size: 10px;
+      font-weight: var(--font-weight-bold);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+    .blog-inner-body {
+      padding: 1.25rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .blog-inner-title {
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-slate-900);
+      font-size: var(--font-size-sm);
+      line-height: 1.4;
+    }
+    .blog-inner-excerpt {
+      font-size: var(--font-size-xs);
+      color: var(--color-slate-600);
+      line-height: 1.5;
+      flex: 1;
+    }
+    .blog-inner-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--color-slate-200);
+      background-color: var(--color-slate-50);
+    }
+    .blog-inner-date {
+      font-size: 11px;
+      color: var(--color-slate-400);
+    }
+    .blog-inner-readtime {
+      font-size: 11px;
+      color: var(--color-primary);
+      font-weight: var(--font-weight-medium);
+    }
+    @media (max-width: 1024px) {
+      .blog-inner-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .blog-inner-grid { grid-template-columns: 1fr; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="announcement-bar">
+      <span>ĐẶC QUYỀN MỚI TỪ MAI TRINH: TẶNG KÈM VOUCHER FREE SHIP DÀNH CHO CÁC SẢN PHẨM <span class="announcement-highlight">SKINCARE</span></span>
+    </div>
+    <nav class="navbar container">
+      <button class="mobile-menu-toggle" aria-label="Mở menu" id="mobile-menu-toggle">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+      <div class="navbar-logo"><a href="/">MAI TRINH HỒ</a></div>
+      <ul class="navbar-menu">
+        <li class="nav-item-dropdown">
+          <a href="/uu-dai-theo-chuong-trinh/" class="nav-link">ƯU ĐÃI<br>THEO CHƯƠNG TRÌNH</a>
+          <ul class="dropdown-menu">
+            <li><a href="/uu-dai-theo-chuong-trinh/#flash-sale" class="dropdown-link">Flash Sale</a></li>
+            <li><a href="/uu-dai-theo-chuong-trinh/#voucher" class="dropdown-link">Voucher &amp; Mã giảm giá</a></li>
+            <li><a href="/uu-dai-theo-chuong-trinh/#combo" class="dropdown-link">Combo Tiết Kiệm</a></li>
+          </ul>
+        </li>
+        <li class="nav-item-dropdown">
+          <a href="/uu-dai-theo-thuong-hieu/" class="nav-link">ƯU ĐÃI<br>THEO THƯƠNG HIỆU</a>
+          <ul class="dropdown-menu">
+            <li><a href="/uu-dai-theo-thuong-hieu/#shiseido" class="dropdown-link">Shiseido</a></li>
+            <li><a href="/uu-dai-theo-thuong-hieu/#estee-lauder" class="dropdown-link">Estée Lauder</a></li>
+            <li><a href="/uu-dai-theo-thuong-hieu/#sk-ii" class="dropdown-link">SK-II</a></li>
+          </ul>
+        </li>
+        <li class="nav-item-dropdown">
+          <a href="/san-pham-theo-nhu-cau/" class="nav-link">SẢN PHẨM<br>THEO NHU CẦU</a>
+          <ul class="dropdown-menu">
+            <li><a href="/san-pham-theo-nhu-cau/#duong-da" class="dropdown-link">Dưỡng Da</a></li>
+            <li><a href="/san-pham-theo-nhu-cau/#trang-diem" class="dropdown-link">Trang Điểm</a></li>
+            <li><a href="/san-pham-theo-nhu-cau/#wellness" class="dropdown-link">Wellness</a></li>
+          </ul>
+        </li>
+        <li class="nav-item-dropdown">
+          <a href="/blog/" class="nav-link active-page" style="display:flex;align-items:center;height:100%;">BLOG</a>
+          <ul class="dropdown-menu">
+            <li><a href="#skincare-tips" class="dropdown-link">Skincare Tips</a></li>
+            <li><a href="#makeup-trend" class="dropdown-link">Makeup Trend</a></li>
+            <li><a href="#wellness" class="dropdown-link">Wellness</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="navbar-actions">
+        <div class="social-grid">
+          <a href="#" aria-label="Facebook" class="action-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+          <a href="#" aria-label="Instagram" class="action-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+          <a href="#" aria-label="YouTube" class="action-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
+          <a href="#" aria-label="TikTok" class="action-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg></a>
+        </div>
+        <span class="navbar-divider"></span>
+        <button aria-label="Tìm kiếm" class="action-btn"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+        <button aria-label="Tài khoản cá nhân" class="action-btn"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="14" cy="7" r="4"></circle></svg></button>
+        <button aria-label="Giỏ hàng" class="action-btn"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></button>
+      </div>
+    </nav>
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-bg">
+        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=2070&auto=format&fit=crop" alt="Blog làm đẹp background">
+      </div>
+      <div class="page-hero-content container">
+        <span class="page-hero-badge">Góc chia sẻ</span>
+        <h1 class="page-hero-title">Blog Làm Đẹp<br>Cùng Mai Trinh</h1>
+        <p class="page-hero-subtitle">Kiến thức thực chiến về skincare, makeup trend và wellness — được Mai Trinh Hồ chia sẻ từ kinh nghiệm thực tế và góc nhìn chuyên sâu của một chuyên gia làm đẹp.</p>
+      </div>
+    </section>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb-list">
+          <li><a href="/">Trang chủ</a></li>
+          <span class="breadcrumb-separator">›</span>
+          <li>Blog</li>
+        </ol>
+      </div>
+    </nav>
+
+    <div class="inner-page-body">
+      <div class="container">
+
+        <!-- SKINCARE TIPS -->
+        <section class="deal-section" id="skincare-tips">
+          <div class="deal-section-header">
+            <div class="deal-section-icon" aria-hidden="true">🧴</div>
+            <h2 class="deal-section-title">Skincare Tips</h2>
+            <span class="deal-section-count">Bí quyết chăm da từ chuyên gia</span>
+          </div>
+          <div class="blog-inner-grid">
+            <article class="blog-inner-card">
+              <div class="blog-inner-image-wrapper">
+                <span class="blog-inner-category">Skincare Tips</span>
+                <img src="https://images.unsplash.com/photo-1570172235384-a14175390e9d?q=80&w=800&auto=format&fit=crop" alt="Lộ trình 7 bước dưỡng da" class="blog-inner-image">
+              </div>
+              <div class="blog-inner-body">
+                <h3 class="blog-inner-title">Lộ trình 7 bước dưỡng da buổi tối chuẩn Spa cho da dầu mụn</h3>
+                <p class="blog-inner-excerpt">Để có một làn da sạch mụn và khỏe mạnh, việc làm sạch sâu và cấp ẩm đúng cách là yếu tố tiên quyết. Hãy cùng Trinh khám phá bí quyết thực chiến...</p>
+              </div>
+              <div class="blog-inner-footer">
+                <span class="blog-inner-date">19 Tháng 04, 2026</span>
+                <span class="blog-inner-readtime">5 phút đọc</span>
+              </div>
+            </article>
+            <article class="blog-inner-card">
+              <div class="blog-inner-image-wrapper">
+                <span class="blog-inner-category">Skincare Tips</span>
+                <img src="https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?q=80&w=800&auto=format&fit=crop" alt="Retinol và da nhạy cảm" class="blog-inner-image">
+              </div>
+              <div class="blog-inner-body">
+                <h3 class="blog-inner-title">Retinol cho người mới bắt đầu: Cách dùng đúng để không bị kích ứng</h3>
+                <p class="blog-inner-excerpt">Retinol là thành phần vàng trong skincare nhưng cũng là con dao hai lưỡi nếu dùng sai cách. Trinh sẽ giải thích cách layering retinol an toàn nhất cho da Á...</p>
+              </div>
+              <div class="blog-inner-footer">
+                <span class="blog-inner-date">17 Tháng 04, 2026</span>
+                <span class="blog-inner-readtime">7 phút đọc</span>
+              </div>
+            </article>
+            <article class="blog-inner-card">
+              <div class="blog-inner-image-wrapper">
+                <span class="blog-inner-category">Skincare Tips</span>
+                <img src="https://images.unsplash.com/photo-1596462502278-27bf84033001?q=80&w=800&auto=format&fit=crop" alt="Kem chống nắng hàng ngày" class="blog-inner-image">
+              </div>
+              <div class="blog-inner-body">
+                <h3 class="blog-inner-title">Tại sao chống nắng là bước dưỡng da quan trọng nhất — dù trời không nắng</h3>
+                <p class="blog-inner-excerpt">UV không cần nắng mới có mặt — đây là sự thật nhiều người vẫn bỏ qua. Trinh chia sẻ cách chọn và dùng kem chống nắng đúng chuẩn cho mọi loại da...</p>
+              </div>
+              <div class="blog-inner-footer">
+                <span class="blog-inner-date">14 Tháng 04, 2026</span>
+                <span class="blog-inner-readtime">6 phút đọc</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- MAKEUP TREND -->
+        <section class="deal-section" id="makeup-trend">
+          <div class="deal-section-header">
+            <div class="deal-section-icon" aria-hidden="true">💋</div>
+            <h2 class="deal-section-title">Makeup Trend</h2>
+            <span class="deal-section-count">Xu hướng làm đẹp mới nhất</span>
+          </div>
+          <div class="blog-inner-grid">
+            <article class="blog-inner-card">
+              <div class="blog-inner-image-wrapper">
+                <span class="blog-inner-category">Makeup Trend</span>
+                <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800&auto=format&fit=crop" alt="Clean Girl Makeup" class="blog-inner-image">
+              </div>
+              <div class="blog-inner-body">
+                <h3 class="blog-inner-title">Style trang điểm "Clean Girl" — Xu hướng dẫn đầu mùa hè 2026</h3>
+                <p class="blog-inner-excerpt">Không cần quá cầu kỳ, phong cách trang điểm Clean Girl tập trung vào sự tự nhiên và rạng rỡ từ bên trong. Đây là cách Trinh thực hiện step by step...</p>
+              </div>
+              <div class="blog-inner-footer">
+                <span class="blog-inner-date">15 Tháng 04, 2026</span>
+                <span class="blog-inner-readtime">4 phút đọc</span>
+              </div>
+            </article>
+            <article class="blog-inner-card">
+              <div class="blog-inner-image-wrapper">
+                <span class="blog-inner-category">Makeup Trend</span>
+                <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&auto=format&fit=crop" alt="Son môi 2026" class="blog-inner-image">
+              </div>
+              <div class="blog-inner-body">
+                <h3 class="blog-inner-title">Top 5 màu son trending nhất 2026 — Lựa chọn hoàn hảo cho da Á Đông</h3>
+                <p class="blog-inner-excerpt">Từ Berry Mauve đến Terracotta Rose — 5 màu son đang làm mưa làm gió trên toàn thế giới và cách Trinh phối chúng với makeup hàng ngày...</p>
+              </div>
+              <div class="blog-inner-footer">
+                <span class="blog-inner-date">11 Tháng 04, 2026</span>
+                <span class="blog-inner-readtime">3 phút đọc</span>
+              </div>
+            </article>
+            <article class="blog-inner-card">
+              <div class="blog-inner-image-wrapper">
+                <span class="blog-inner-category">Makeup Trend</span>
+                <img src="https://images.unsplash.com/photo-1594465919760-441fe5908ab0?q=80&w=800&auto=format&fit=crop" alt="Blush placement 2026" class="blog-inner-image">
+              </div>
+              <div class="blog-inner-body">
+                <h3 class="blog-inner-title">Blush Placement 2026: Đặt má hồng đúng vị trí để trẻ hóa khuôn mặt tức thì</h3>
+                <p class="blog-inner-excerpt">Vị trí đặt blush quyết định đến 40% diện mạo tổng thể. Trinh hướng dẫn chi tiết 4 kiểu blush placement đang thịnh hành tùy theo hình dáng khuôn mặt...</p>
+              </div>
+              <div class="blog-inner-footer">
+                <span class="blog-inner-date">08 Tháng 04, 2026</span>
+                <span class="blog-inner-readtime">5 phút đọc</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- WELLNESS -->
+        <section class="deal-section" id="wellness">
+          <div class="deal-section-header">
+            <div class="deal-section-icon" aria-hidden="true">🌿</div>
+            <h2 class="deal-section-title">Wellness</h2>
+            <span class="deal-section-count">Sức khỏe &amp; vẻ đẹp từ bên trong</span>
+          </div>
+          <div class="blog-inner-grid">
+            <article class="blog-inner-card">
+              <div class="blog-inner-image-wrapper">
+                <span class="blog-inner-category">Wellness</span>
+                <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=800&auto=format&fit=crop" alt="Thực phẩm làm đẹp" class="blog-inner-image">
+              </div>
+              <div class="blog-inner-body">
+                <h3 class="blog-inner-title">Bí quyết chọn thực phẩm chức năng giúp duy trì nét xuân từ bên trong</h3>
+                <p class="blog-inner-excerpt">Đẹp bên ngoài thôi là chưa đủ, một sức sống tràn đầy từ bên trong mới giúp bạn luôn tươi trẻ. Trinh liệt kê 5 loại thực phẩm chức năng không thể bỏ...</p>
+              </div>
+              <div class="blog-inner-footer">
+                <span class="blog-inner-date">12 Tháng 04, 2026</span>
+                <span class="blog-inner-readtime">6 phút đọc</span>
+              </div>
+            </article>
+            <article class="blog-inner-card">
+              <div class="blog-inner-image-wrapper">
+                <span class="blog-inner-category">Wellness</span>
+                <img src="https://images.unsplash.com/photo-1570172235384-a14175390e9d?q=80&w=800&auto=format&fit=crop" alt="Giấc ngủ và làn da" class="blog-inner-image">
+              </div>
+              <div class="blog-inner-body">
+                <h3 class="blog-inner-title">Ngủ đủ giấc là loại serum tốt nhất: Khoa học đằng sau "beauty sleep"</h3>
+                <p class="blog-inner-excerpt">Trong khi bạn ngủ, cơ thể sản xuất collagen và phục hồi tế bào da với tốc độ gấp đôi ban ngày. Trinh chia sẻ routine tối ưu cho giấc ngủ đẹp da...</p>
+              </div>
+              <div class="blog-inner-footer">
+                <span class="blog-inner-date">09 Tháng 04, 2026</span>
+                <span class="blog-inner-readtime">5 phút đọc</span>
+              </div>
+            </article>
+            <article class="blog-inner-card">
+              <div class="blog-inner-image-wrapper">
+                <span class="blog-inner-category">Wellness</span>
+                <img src="https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?q=80&w=800&auto=format&fit=crop" alt="Stress và da mặt" class="blog-inner-image">
+              </div>
+              <div class="blog-inner-body">
+                <h3 class="blog-inner-title">Stress gây mụn — Giải pháp toàn diện để kiểm soát cortisol và bảo vệ làn da</h3>
+                <p class="blog-inner-excerpt">Cortisol tăng cao do stress là nguyên nhân hàng đầu gây mụn nội tiết và da xỉn màu. Trinh chia sẻ phương pháp giảm stress hiệu quả kết hợp skincare...</p>
+              </div>
+              <div class="blog-inner-footer">
+                <span class="blog-inner-date">05 Tháng 04, 2026</span>
+                <span class="blog-inner-readtime">8 phút đọc</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo">MAI TRINH HỒ</a>
+          <p class="footer-tagline">Sứ mệnh của Trinh là đem đến những giá trị tích cực, giúp phụ nữ Việt tự tin hơn với vẻ đẹp và phong cách cá nhân của chính mình.</p>
+          <div class="footer-socials">
+            <a href="#" class="social-link" aria-label="Facebook"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+            <a href="#" class="social-link" aria-label="Instagram"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+            <a href="#" class="social-link" aria-label="YouTube"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
+            <a href="#" class="social-link" aria-label="TikTok"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg></a>
+          </div>
+        </div>
+        <div class="footer-menu">
+          <h4 class="footer-title">Hỗ Trợ Khách Hàng</h4>
+          <ul class="footer-links">
+            <li><a href="#">Hướng dẫn mua hàng</a></li>
+            <li><a href="#">Chính sách thanh toán</a></li>
+            <li><a href="#">Vận chuyển &amp; Giao nhận</a></li>
+            <li><a href="#">Đổi trả &amp; Bảo hành</a></li>
+            <li><a href="#">Chính sách bảo mật</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h4 class="footer-title">Khám Phá</h4>
+          <ul class="footer-links">
+            <li><a href="#">Về Mai Trinh Hồ</a></li>
+            <li><a href="#">Cửa hàng mỹ phẩm</a></li>
+            <li><a href="#">Góc Review làm đẹp</a></li>
+            <li><a href="#">Tuyển dụng</a></li>
+            <li><a href="#">Liên hệ hợp tác</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h4 class="footer-title">Thông Tin Liên Hệ</h4>
+          <div class="footer-contact-info">
+            <div class="contact-item">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span>Quận 1, TP. Hồ Chí Minh, Việt Nam</span>
+            </div>
+            <div class="contact-item">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              <span>contact@maitrinhho.com</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 MAI TRINH HỒ. All rights reserved.</p>
+        <p>Thiết kế theo chuẩn UI/UX Pro Max</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
