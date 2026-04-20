@@ -1,0 +1,66 @@
+/* ==========================================================================
+   BRANDS STRIP COMPONENT
+   ========================================================================== */
+
+.brands-section {
+  padding: 4rem 0;
+  background-color: var(--color-slate-50);
+  border-bottom: 1px solid var(--color-slate-200);
+}
+
+.brands-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.brands-title {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-slate-400);
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+}
+
+/* Flex layout for logos to ensure center alignment and wrap on small screens */
+.brands-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  width: 100%;
+}
+
+.brand-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5; /* Subtle by default */
+  filter: grayscale(1); /* Premium minimal look */
+  transition: all var(--transition-base);
+  max-width: 140px;
+}
+
+/* Luxury Interaction: Reveal color and opacity on hover */
+.brand-item:hover {
+  opacity: 1;
+  filter: grayscale(0);
+  transform: scale(1.05); /* Very subtle scale up */
+}
+
+.brand-logo {
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .brands-grid {
+    gap: 2.5rem;
+  }
+  .brand-item {
+    max-width: 100px;
+  }
+}

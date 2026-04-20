@@ -1,0 +1,200 @@
+/* ==========================================================================
+   PRODUCT GRID & CARD COMPONENT
+   ========================================================================== */
+
+.products-section {
+  padding: 6rem 0;
+  background-color: var(--color-bg-base);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: var(--font-size-3xl);
+  color: var(--color-slate-900);
+}
+
+.section-link {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.section-link:hover {
+  border-bottom-color: var(--color-primary);
+}
+
+/* 1. Grid Layout */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+/* 2. Product Card Container */
+.product-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  transition: transform var(--transition-base);
+  cursor: pointer;
+}
+
+/* Image Wrapper */
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Chuẩn ảnh mỹ phẩm vuông */
+  overflow: hidden;
+  background-color: var(--color-slate-50);
+  border-radius: var(--radius-sm);
+  margin-bottom: 1rem;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-flow); /* Phóng nhẹ 500ms mượt */
+}
+
+/* Hover Zoom Effect */
+.product-card:hover .product-image {
+  transform: scale(1.08); 
+}
+
+/* Badges Container */
+.product-badges-container {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 5;
+}
+
+/* Base Badge Style - Doubled size and improved visibility */
+.product-badge {
+  color: #fff;
+  font-size: 14px; /* Tăng từ 10px lên 14-16px để rõ ràng hơn */
+  font-weight: var(--font-weight-bold);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  text-transform: uppercase;
+}
+
+.badge-sale {
+  background-color: var(--color-sale-red);
+}
+
+.badge-hot {
+  background-color: var(--color-hot-gold);
+}
+
+/* "MUA NGAY" Slide-up Overlay */
+.product-action-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.4) 0%, transparent 100%);
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all var(--transition-base);
+  z-index: 10;
+}
+
+.product-card:hover .product-action-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Nút mua ngay ghi đè style nhỏ hơn xíu cho card */
+.btn-buy {
+  padding: 0.6rem 1.5rem;
+  font-size: 11px;
+}
+
+/* 3. Product Info */
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.product-vendor {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-slate-400);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.product-name {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-slate-900);
+  line-height: 1.4;
+  /* Giới hạn 2 dòng cho tên sp */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.8em;
+}
+
+.product-price-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.price-current {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-slate-900);
+}
+
+.price-old {
+  font-size: var(--font-size-sm);
+  color: var(--color-slate-400);
+  text-decoration: line-through;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .section-title {
+    font-size: var(--font-size-2xl);
+  }
+  .product-action-overlay {
+      display: none; /* Mobile bỏ hover cho nhẹ UX, click thẳng card */
+  }
+}

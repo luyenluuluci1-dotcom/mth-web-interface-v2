@@ -1,0 +1,48 @@
+/* ==========================================================================
+   BUTTONS (UX PRO MAX STYLE & A11y)
+   ========================================================================== */
+
+/* Base component for all buttons to inherit */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 2.5rem;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-base); /* Mượt mà đúng 300ms */
+  cursor: pointer;
+  text-align: center;
+}
+
+/* Primary Coral Button Focus */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: 1px solid var(--color-primary);
+  box-shadow: var(--shadow-sm); /* Viền shadow tĩnh nhẹ nhàng */
+}
+
+/* Liquid Hover State */
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  transform: translateY(-2px); /* Tôn vinh tính nổi khối */
+  box-shadow: var(--shadow-md); /* Bóng sâu hơn khi hover */
+}
+
+/* Secondary/Outline/Ghost Button focus */
+.btn-outline {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+.btn-outline:hover {
+  background-color: rgba(255, 255, 255, 0.15); /* Glass tint */
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}

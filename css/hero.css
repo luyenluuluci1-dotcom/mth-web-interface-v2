@@ -1,0 +1,122 @@
+/* ==========================================================================
+   HERO BANNER COMPONENT
+   ========================================================================== */
+
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 85vh; /* Responsive height */
+  min-height: 650px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* 1. Background image & gradient overlay */
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* Background Layer */
+}
+
+.hero-background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%; /* Focus vào trọng tâm ảnh */
+}
+
+/* Linear-gradient xử lý text contrast - chuẩn tối thiểu 4.5:1 */
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Hiệu ứng gradient trải từ trái sang để text trắng nổi bật */
+  background: linear-gradient(to right, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.2) 60%);
+}
+
+/* 2. Content Container */
+.hero-container {
+  position: relative;
+  z-index: 2; /* Nổi phía Layout trên */
+  width: 100%;
+}
+
+.hero-content {
+  max-width: 650px;
+  color: #ffffff;
+  /* Animation reveal từ mờ - Không gây shift layout */
+  animation: fadeUp 0.8s ease-out forwards;
+}
+
+/* Component Badge nhỏ phía trên */
+.hero-badge {
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 2px;
+  background-color: var(--color-primary);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill); /* Bo tròn đặc trưng */
+  margin-bottom: 1.5rem;
+}
+
+/* 3. Typography xử lý riêng nền tối Hero */
+.hero-title {
+  font-size: var(--font-size-5xl);
+  font-family: var(--font-family-heading);
+  color: #ffffff; /* Cấm dùng Slate-900 cho nền tối */
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+}
+
+.hero-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-slate-200); /* Màu ngả kem xám */
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  max-width: 500px;
+}
+
+/* Bố cục chia Button */
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap; /* Tránh tràn mobile */
+}
+
+/* Micro-interaction Keyframes */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tối ưu hóa Responsive Mobile */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: var(--font-size-4xl);
+  }
+  .hero-overlay {
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
+  }
+  .hero-content {
+    text-align: center;
+    margin: 0 auto;
+  }
+  .hero-buttons {
+    justify-content: center;
+  }
+}
