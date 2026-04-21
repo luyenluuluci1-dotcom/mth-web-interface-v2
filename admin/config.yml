@@ -2,7 +2,9 @@ backend:
   name: github
   repo: luyenluuluci1-dotcom/mth-web-interface-v2
   branch: main
-  # Sveltia CMS tự động xử lý OAuth với Github nên không cần định nghĩa proxy phức tạp ở đây
+  # Đã gỡ bỏ cấu hình mặc định của Netlify. 
+  # Nhân viên có thể đăng nhập bằng mã "Personal Access Token" để an toàn và nhanh chóng.
+
 
 # Nơi lưu trữ hình ảnh khi nhân viên upload
 media_folder: "images/uploads"
