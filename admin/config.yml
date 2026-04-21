@@ -3,7 +3,8 @@ backend:
   repo: luyenluuluci1-dotcom/mth-web-interface-v2
   branch: main
   base_url: https://mth-cms-auth.vercel.app
-  auth_endpoint: auth
+  auth_endpoint: /auth
+
 
 
 
