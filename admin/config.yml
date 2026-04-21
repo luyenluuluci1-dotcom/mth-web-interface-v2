@@ -2,8 +2,9 @@ backend:
   name: github
   repo: luyenluuluci1-dotcom/mth-web-interface-v2
   branch: main
-  # Đã gỡ bỏ cấu hình mặc định của Netlify. 
-  # Nhân viên có thể đăng nhập bằng mã "Personal Access Token" để an toàn và nhanh chóng.
+  base_url: https://mth-cms-auth.vercel.app
+  auth_endpoint: auth
+
 
 
 # Nơi lưu trữ hình ảnh khi nhân viên upload
