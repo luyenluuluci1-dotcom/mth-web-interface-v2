@@ -1,0 +1,13 @@
+{
+  "title": "Kem Dưỡng Tái Tạo Ban Đêm Revitalizing Supreme+",
+  "category": "Dưỡng Da",
+  "vendor": "ESTÉE LAUDER",
+  "original_price": 4200000,
+  "current_price": 3450000,
+  "description": "Kem dưỡng ban đêm giàu dưỡng chất, giúp phục hồi và tái tạo da trong khi ngủ. Công nghệ Multi-Dimensional Antioxidant.",
+  "image": "https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?q=80&w=600&auto=format&fit=crop",
+  "badge": "",
+  "visible": true,
+  "display_pages": ["homepage", "san-pham-theo-nhu-cau", "uu-dai-theo-thuong-hieu"],
+  "sort_order": 2
+}

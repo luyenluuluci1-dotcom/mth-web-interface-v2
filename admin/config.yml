@@ -7,7 +7,6 @@ backend:
 
 
 
-
 # Nơi lưu trữ hình ảnh khi nhân viên upload
 media_folder: "images/uploads"
 # Đường dẫn công khai khi render ra hình ảnh
@@ -31,20 +30,81 @@ collections:
       - {label: "Ảnh đại diện", name: "thumbnail", widget: "image", required: false}
       - {label: "Danh mục", name: "category", widget: "select", options: ["Skincare Tips", "Makeup Trend", "Wellness"]}
       - {label: "Ngày đăng", name: "date", widget: "datetime"}
+      - {label: "Mô tả ngắn", name: "excerpt", widget: "text", required: false, hint: "Đoạn tóm tắt hiển thị ở trang chủ"}
+      - {label: "Hiển thị", name: "visible", widget: "boolean", default: true, hint: "Bật/tắt hiển thị bài viết"}
+      - {label: "Hiển thị ở trang chủ", name: "display_on_homepage", widget: "boolean", default: false, hint: "Có hiển thị ở phần Blog trang chủ?"}
 
-  # 2. Quản lý Sản phẩm theo nhu cầu
+  # 2. Quản lý Sản phẩm
   - name: "products"
-    label: "Sản phẩm (Sản phẩm theo nhu cầu)"
+    label: "Sản phẩm"
     folder: "data/products"
     create: true
     extension: "json"
     format: "json"
     fields:
       - {label: "Tên sản phẩm", name: "title", widget: "string"}
-      - {label: "Nhu cầu (Danh mục chính)", name: "category", widget: "select", options: ["Dưỡng Da", "Trang Điểm", "Wellness"]}
-      - {label: "Thương hiệu / Phân loại phụ", name: "vendor", widget: "string", default: "MTH Beauty"}
+      - {label: "Danh mục chính", name: "category", widget: "select", options: ["Dưỡng Da", "Trang Điểm", "Wellness"]}
+      - {label: "Thương hiệu", name: "vendor", widget: "string", default: "MTH Beauty"}
       - {label: "Giá gốc (VNĐ)", name: "original_price", widget: "number", value_type: "int"}
       - {label: "Giá đang bán (VNĐ)", name: "current_price", widget: "number", value_type: "int"}
       - {label: "Mô tả ngắn", name: "description", widget: "text"}
       - {label: "Ảnh sản phẩm", name: "image", widget: "image"}
       - {label: "Nhãn nổi bật (Badge)", name: "badge", widget: "string", required: false, hint: "Vd: DA DẦU MỤN, COMBO, HOT..."}
+      - {label: "Hiển thị", name: "visible", widget: "boolean", default: true, hint: "Bật/tắt hiển thị sản phẩm trên website"}
+      - label: "Hiển thị tại các trang"
+        name: "display_pages"
+        widget: "select"
+        multiple: true
+        options:
+          - {label: "Trang chính", value: "homepage"}
+          - {label: "Ưu đãi theo chương trình", value: "uu-dai-theo-chuong-trinh"}
+          - {label: "Ưu đãi theo thương hiệu", value: "uu-dai-theo-thuong-hieu"}
+          - {label: "Sản phẩm theo nhu cầu", value: "san-pham-theo-nhu-cau"}
+        hint: "Chọn các trang mà sản phẩm này sẽ hiển thị"
+      - {label: "Thứ tự sắp xếp", name: "sort_order", widget: "number", default: 0, hint: "Số nhỏ hiển thị trước"}
+
+  # 3. Quản lý Banner trang chủ
+  - name: "banners"
+    label: "Banner Trang Chủ"
+    folder: "data/banners"
+    create: true
+    extension: "json"
+    format: "json"
+    slug: "banner-{{slug}}"
+    fields:
+      - {label: "Tiêu đề (quản lý)", name: "title", widget: "string", hint: "Tên để phân biệt banner trong CMS"}
+      - {label: "Ảnh Banner", name: "image", widget: "image"}
+      - {label: "Tiêu đề hiển thị", name: "heading", widget: "string", required: false, hint: "Dòng chữ lớn trên banner"}
+      - {label: "Phụ đề", name: "subtitle", widget: "text", required: false}
+      - {label: "Nhãn nhỏ (Badge)", name: "badge_text", widget: "string", required: false, hint: "Vd: BỘ SƯU TẬP MỚI"}
+      - {label: "Nút CTA - Text", name: "cta_text", widget: "string", required: false, default: "KHÁM PHÁ NGAY"}
+      - {label: "Nút CTA - Link", name: "cta_link", widget: "string", required: false}
+      - {label: "Hiển thị", name: "visible", widget: "boolean", default: true}
+      - {label: "Thứ tự sắp xếp", name: "sort_order", widget: "number", default: 0, hint: "Số nhỏ hiển thị trước"}
+
+  # 4. Quản lý Cấu hình Mục hiển thị
+  - name: "settings"
+    label: "Cài đặt Website"
+    files:
+      - label: "Cấu hình các mục hiển thị"
+        name: "sections_config"
+        file: "data/sections-config.json"
+        fields:
+          - label: "Ưu đãi theo chương trình"
+            name: "uu_dai_chuong_trinh"
+            widget: "object"
+            fields:
+              - {label: "Mô tả mục", name: "description", widget: "text", default: "Các chương trình ưu đãi đặc biệt dành riêng cho bạn"}
+              - {label: "Thứ tự sản phẩm (slug)", name: "product_order", widget: "string", required: false, hint: "Slug sản phẩm cách nhau bởi dấu phẩy. Vd: serum-shiseido,kem-estee"}
+          - label: "Ưu đãi theo thương hiệu"
+            name: "uu_dai_thuong_hieu"
+            widget: "object"
+            fields:
+              - {label: "Mô tả mục", name: "description", widget: "text", default: "Ưu đãi từ các thương hiệu hàng đầu thế giới"}
+              - {label: "Thứ tự sản phẩm (slug)", name: "product_order", widget: "string", required: false, hint: "Slug sản phẩm cách nhau bởi dấu phẩy"}
+          - label: "Sản phẩm theo nhu cầu"
+            name: "san_pham_nhu_cau"
+            widget: "object"
+            fields:
+              - {label: "Mô tả mục", name: "description", widget: "text", default: "Sản phẩm được lựa chọn theo nhu cầu làm đẹp cá nhân"}
+              - {label: "Thứ tự sản phẩm (slug)", name: "product_order", widget: "string", required: false, hint: "Slug sản phẩm cách nhau bởi dấu phẩy"}

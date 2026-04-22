@@ -1,0 +1,13 @@
+{
+  "title": "Luxe Lip Color - Son Thỏi Cao Cấp Siêu Dưỡng Môi",
+  "category": "Trang Điểm",
+  "vendor": "BOBBI BROWN",
+  "original_price": 1120000,
+  "current_price": 950000,
+  "description": "Son thỏi cao cấp với công thức dưỡng ẩm, lên màu chuẩn và bền lâu suốt ngày. Nhiều tông màu phù hợp mọi phong cách.",
+  "image": "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=600&auto=format&fit=crop",
+  "badge": "",
+  "visible": true,
+  "display_pages": ["homepage", "san-pham-theo-nhu-cau", "uu-dai-theo-chuong-trinh"],
+  "sort_order": 4
+}

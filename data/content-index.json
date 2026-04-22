@@ -1,0 +1,20 @@
+{
+  "banners": [
+    "banners/banner-kham-pha-mua-he.json",
+    "banners/banner-flash-sale.json",
+    "banners/banner-skincare-premium.json",
+    "banners/banner-thuong-hieu.json",
+    "banners/banner-makeup-trend.json"
+  ],
+  "products": [
+    "products/serum-shiseido-ultimune.json",
+    "products/kem-estee-lauder-night.json",
+    "products/nuoc-than-sk-ii.json",
+    "products/son-bobbi-brown-luxe.json"
+  ],
+  "blog": [
+    "blog/2026-04-19-skincare-routine.json",
+    "blog/2026-04-15-clean-girl-makeup.json",
+    "blog/2026-04-12-wellness-supplements.json"
+  ]
+}

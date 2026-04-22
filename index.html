@@ -118,28 +118,26 @@
   </header>
 
   <main>
-    <!-- Hero Banner Component -->
-    <section class="hero-section">
-      <!-- Background / Gradient Overlay -->
-      <div class="hero-background">
-        <!-- Ảnh Demo Unsplash tạm (style Beauty spa premium) -->
-        <img src="https://images.unsplash.com/photo-1596462502278-27bf84033001?q=80&w=2071&auto=format&fit=crop" alt="Mai Trinh Hồ Beauty Premium Background" loading="eager">
-        <div class="hero-overlay"></div>
+    <!-- ================================================================
+         HERO BANNER CAROUSEL
+         ================================================================ -->
+    <section class="hero-section" id="hero-carousel">
+      <!-- Slides Container -->
+      <div class="hero-slides-track">
+        <!-- Slides will be dynamically injected by JS from data/banners/ -->
       </div>
 
-      <!-- Hero Content Centered / Layout -->
-      <div class="hero-container container">
-        <div class="hero-content">
-          <span class="hero-badge">BỘ SƯU TẬP MỚI</span>
-          <h1 class="hero-title">Đánh Thức Vẻ Đẹp,<br>Lan Tỏa Khí Chất</h1>
-          <p class="hero-subtitle">
-            Khám phá những kiệt tác chăm sóc sắc đẹp cao cấp, được lựa chọn kỹ lưỡng để tôn vinh sự thanh lịch và phong cách đẳng cấp của bạn.
-          </p>
-          <div class="hero-buttons">
-            <button class="btn btn-primary" aria-label="Khám phá ngay">KHÁM PHÁ NGAY</button>
-            <button class="btn btn-outline" aria-label="Tư vấn chuyên gia">TƯ VẤN CÙNG CHUYÊN GIA</button>
-          </div>
-        </div>
+      <!-- Navigation Arrows -->
+      <button class="hero-nav hero-prev" id="hero-prev" aria-label="Banner trước">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <button class="hero-nav hero-next" id="hero-next" aria-label="Banner tiếp theo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+
+      <!-- Indicator Dots -->
+      <div class="hero-dots" id="hero-dots">
+        <!-- Dots injected dynamically by JS -->
       </div>
     </section>
 
@@ -148,7 +146,6 @@
       <div class="brands-container container">
         <h2 class="brands-title">ĐỐI TÁC CHIẾN LƯỢC TOÀN CẦU</h2>
         <div class="brands-grid">
-          <!-- Hàng loạt logo các hãng lớn (Placeholder với tỷ lệ chuẩn) -->
           <div class="brand-item">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Shiseido_logo.svg/320px-Shiseido_logo.svg.png" alt="Shiseido Logo" class="brand-logo">
           </div>
@@ -171,153 +168,52 @@
       </div>
     </section>
 
-    <!-- Featured Collection: ƯU ĐÃI THÁNG 04 -->
-    <section class="products-section container">
+    <!-- ================================================================
+         DYNAMIC CONTENT SECTIONS (loaded from data/ by JS)
+         ================================================================ -->
+
+    <!-- 1. ƯU ĐÃI THEO CHƯƠNG TRÌNH -->
+    <section class="products-section container" id="section-uu-dai-chuong-trinh">
       <div class="section-header">
-        <h2 class="section-title">Ưu Đãi Đặc Biệt Tháng 04</h2>
-        <a href="#" class="section-link">Xem tất cả</a>
+        <h2 class="section-title">Ưu Đãi Theo Chương Trình</h2>
+        <a href="/uu-dai-theo-chuong-trinh/" class="section-link">Xem tất cả</a>
       </div>
-
-      <div class="products-grid">
-        <!-- Sản phẩm 1 -->
-        <article class="product-card">
-          <div class="product-image-wrapper">
-            <div class="product-badges-container">
-              <span class="product-badge badge-sale">-25%</span>
-              <span class="product-badge badge-hot">HOT</span>
-            </div>
-            <img src="https://images.unsplash.com/photo-1570172235384-a14175390e9d?q=80&w=600&auto=format&fit=crop" alt="Serum trẻ hóa" class="product-image">
-            <div class="product-action-overlay">
-              <button class="btn btn-primary btn-buy">MUA NGAY</button>
-            </div>
-          </div>
-          <div class="product-info">
-            <span class="product-vendor">SHISEIDO</span>
-            <h3 class="product-name">Serum Dưỡng Da Ultimune Power Infusing Concentrate 50ml</h3>
-            <div class="product-price-row">
-              <span class="price-current">2.850.000₫</span>
-              <span class="price-old">3.800.000₫</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Sản phẩm 2 -->
-        <article class="product-card">
-          <div class="product-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?q=80&w=600&auto=format&fit=crop" alt="Kem dưỡng đêm" class="product-image">
-            <div class="product-action-overlay">
-              <button class="btn btn-primary btn-buy">MUA NGAY</button>
-            </div>
-          </div>
-          <div class="product-info">
-            <span class="product-vendor">ESTÉE LAUDER</span>
-            <h3 class="product-name">Kem Dưỡng Tái Tạo Ban Đêm Revitalizing Supreme+ Night Power Soft Creme</h3>
-            <div class="product-price-row">
-              <span class="price-current">3.450.000₫</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Sản phẩm 3 -->
-        <article class="product-card">
-          <div class="product-image-wrapper">
-            <div class="product-badges-container">
-              <span class="product-badge badge-hot">HOT</span>
-              <span class="product-badge badge-sale">SALE</span>
-            </div>
-            <img src="https://images.unsplash.com/photo-1594465919760-441fe5908ab0?q=80&w=600&auto=format&fit=crop" alt="Nước thần" class="product-image">
-            <div class="product-action-overlay">
-              <button class="btn btn-primary btn-buy">MUA NGAY</button>
-            </div>
-          </div>
-          <div class="product-info">
-            <span class="product-vendor">SK-II</span>
-            <h3 class="product-name">Nước Thần Kì Diệu Facial Treatment Essence - Phiên Bản 2026</h3>
-            <div class="product-price-row">
-              <span class="price-current">4.200.000₫</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Sản phẩm 4 -->
-        <article class="product-card">
-          <div class="product-image-wrapper">
-            <div class="product-badges-container">
-              <span class="product-badge badge-sale">-15%</span>
-            </div>
-            <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=600&auto=format&fit=crop" alt="Son môi" class="product-image">
-            <div class="product-action-overlay">
-              <button class="btn btn-primary btn-buy">MUA NGAY</button>
-            </div>
-          </div>
-          <div class="product-info">
-            <span class="product-vendor">BOBBI BROWN</span>
-            <h3 class="product-name">Luxe Lip Color - Dòng Son Thỏi Cao Cấp Siêu Dưỡng Môi</h3>
-            <div class="product-price-row">
-              <span class="price-current">950.000₫</span>
-              <span class="price-old">1.120.000₫</span>
-            </div>
-          </div>
-        </article>
+      <div class="products-grid" data-section="uu-dai-theo-chuong-trinh">
+        <!-- Products loaded dynamically -->
       </div>
     </section>
 
-    <!-- Blog / Expert Tips Section -->
-    <section class="blog-section">
+    <!-- 2. ƯU ĐÃI THEO THƯƠNG HIỆU -->
+    <section class="products-section container" id="section-uu-dai-thuong-hieu">
+      <div class="section-header">
+        <h2 class="section-title">Ưu Đãi Theo Thương Hiệu</h2>
+        <a href="/uu-dai-theo-thuong-hieu/" class="section-link">Xem tất cả</a>
+      </div>
+      <div class="products-grid" data-section="uu-dai-theo-thuong-hieu">
+        <!-- Products loaded dynamically -->
+      </div>
+    </section>
+
+    <!-- 3. SẢN PHẨM THEO NHU CẦU -->
+    <section class="products-section container" id="section-san-pham-nhu-cau">
+      <div class="section-header">
+        <h2 class="section-title">Sản Phẩm Theo Nhu Cầu</h2>
+        <a href="/san-pham-theo-nhu-cau/" class="section-link">Xem tất cả</a>
+      </div>
+      <div class="products-grid" data-section="san-pham-theo-nhu-cau">
+        <!-- Products loaded dynamically -->
+      </div>
+    </section>
+
+    <!-- 4. BLOG -->
+    <section class="blog-section" id="section-blog">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Góc Chia Sẻ Cùng Mai Trinh</h2>
-          <a href="#" class="section-link">Tất cả bài viết</a>
+          <h2 class="section-title">Blog</h2>
+          <a href="/blog/" class="section-link">Xem tất cả</a>
         </div>
-
-        <div class="blog-grid">
-          <!-- Bài viết 1 -->
-          <article class="blog-card">
-            <div class="blog-image-wrapper">
-              <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800&auto=format&fit=crop" alt="Skincare Routine" class="blog-image">
-            </div>
-            <div class="blog-category">Skincare Tips</div>
-            <h3 class="blog-title">Lộ trình 7 bước dưỡng da buổi tối chuẩn Spa cho da dầu mụn</h3>
-            <p class="blog-excerpt">
-              Để có một làn da sạch mụn và khỏe mạnh, việc làm sạch sâu và cấp ẩm đúng cách là yếu tố tiên quyết. Hãy cùng Trinh khám phá bí quyết...
-            </p>
-            <div class="blog-footer">
-              <span class="blog-date">19 Tháng 04, 2026</span>
-              <span class="blog-read-time">5 phút đọc</span>
-            </div>
-          </article>
-
-          <!-- Bài viết 2 -->
-          <article class="blog-card">
-            <div class="blog-image-wrapper">
-              <img src="https://images.unsplash.com/photo-1596462502278-27bf84033001?q=80&w=800&auto=format&fit=crop" alt="Makeup Tutorial" class="blog-image">
-            </div>
-            <div class="blog-category">Makeup Trend</div>
-            <h3 class="blog-title">Style trang điểm "Clean Girl" - Xu hướng dẫn đầu mùa hè 2026</h3>
-            <p class="blog-excerpt">
-              Không cần quá cầu kỳ, phong cách trang điểm Clean Girl tập trung vào sự tự nhiên và rạng rỡ từ bên trong. Đây là cách Trinh thực hiện...
-            </p>
-            <div class="blog-footer">
-              <span class="blog-date">15 Tháng 04, 2026</span>
-              <span class="blog-read-time">4 phút đọc</span>
-            </div>
-          </article>
-
-          <!-- Bài viết 3 -->
-          <article class="blog-card">
-            <div class="blog-image-wrapper">
-              <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=800&auto=format&fit=crop" alt="Wellness Review" class="blog-image">
-            </div>
-            <div class="blog-category">Wellness</div>
-            <h3 class="blog-title">Bí quyết chọn thực phẩm chức năng giúp duy trì nét xuân từ bên trong</h3>
-            <p class="blog-excerpt">
-              Đẹp bên ngoài thôi là chưa đủ, một sức sống tràn đầy từ bên trong mới giúp bạn luôn tươi trẻ. Trinh sẽ liệt kê 5 loại thực phẩm...
-            </p>
-            <div class="blog-footer">
-              <span class="blog-date">12 Tháng 04, 2026</span>
-              <span class="blog-read-time">6 phút đọc</span>
-            </div>
-          </article>
+        <div class="blog-grid" id="homepage-blog-grid">
+          <!-- Blog posts loaded dynamically -->
         </div>
       </div>
     </section>
