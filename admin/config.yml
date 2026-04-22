@@ -13,8 +13,7 @@ media_folder: "images/uploads"
 # Đường dẫn công khai khi render ra hình ảnh
 public_folder: "/images/uploads"
 
-# Tùy chỉnh ngôn ngữ sang Tiếng Việt cho nhân viên dễ xài
-locale: "vi"
+# Lưu ý: locale: "vi" đã bị xóa vì Sveltia CMS chưa hỗ trợ tùy chọn này
 
 # Danh sách các nội dung cần quản lý
 collections:
