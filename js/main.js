@@ -92,6 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (productGrids.length > 0 || blogGrid) {
         initDynamicContent();
     }
+    
+    // Initial Route Check
+    if (typeof handleRoute === 'function') {
+        handleRoute();
+    }
 });
 
 
@@ -263,7 +268,10 @@ async function initDynamicContent() {
         let allProducts = [];
         if (index.products) {
             const results = await Promise.allSettled(
-                index.products.map(path => fetchJSON(`./data/${path}`))
+                index.products.map(path => fetchJSON(`./data/${path}`).then(data => {
+                    if (data) data._slug = path.split('/').pop().replace('.json', '');
+                    return data;
+                }))
             );
             allProducts = results
                 .filter(r => r.status === 'fulfilled' && r.value)
@@ -306,7 +314,10 @@ async function initDynamicContent() {
         const blogGrid = document.getElementById('homepage-blog-grid');
         if (blogGrid && index.blog) {
             const blogResults = await Promise.allSettled(
-                index.blog.map(path => fetchJSON(`./data/${path}`))
+                index.blog.map(path => fetchJSON(`./data/${path}`).then(data => {
+                    if (data) data._slug = path.split('/').pop().replace('.json', '');
+                    return data;
+                }))
             );
             const blogPosts = blogResults
                 .filter(r => r.status === 'fulfilled' && r.value)
@@ -369,14 +380,18 @@ function createProductCard(product) {
     card.innerHTML = `
         <div class="product-image-wrapper">
             ${badgesHTML}
-            <img src="${product.image}" alt="${product.title}" class="product-image" loading="lazy">
+            <a href="#/collections/products/entries/${product._slug}">
+                <img src="${product.image}" alt="${product.title}" class="product-image" loading="lazy">
+            </a>
             <div class="product-action-overlay">
-                <button class="btn btn-primary btn-buy">MUA NGAY</button>
+                <a href="#/collections/products/entries/${product._slug}" class="btn btn-primary btn-buy" style="text-decoration: none; text-align: center;">XEM CHI TIẾT</a>
             </div>
         </div>
         <div class="product-info">
             <span class="product-vendor">${product.vendor || ''}</span>
-            <h3 class="product-name">${product.title}</h3>
+            <a href="#/collections/products/entries/${product._slug}" style="text-decoration: none; color: inherit;">
+                <h3 class="product-name">${product.title}</h3>
+            </a>
             <div class="product-price-row">
                 <span class="price-current">${currentFormatted}</span>
                 ${originalFormatted ? `<span class="price-old">${originalFormatted}</span>` : ''}
@@ -405,10 +420,14 @@ function createBlogCard(post) {
 
     card.innerHTML = `
         <div class="blog-image-wrapper">
-            <img src="${post.thumbnail || ''}" alt="${post.title}" class="blog-image" loading="lazy">
+            <a href="#/collections/blog/entries/${post._slug}">
+                <img src="${post.thumbnail || ''}" alt="${post.title}" class="blog-image" loading="lazy">
+            </a>
         </div>
         <div class="blog-category">${post.category || ''}</div>
-        <h3 class="blog-title">${post.title}</h3>
+        <a href="#/collections/blog/entries/${post._slug}" style="text-decoration: none; color: inherit;">
+            <h3 class="blog-title">${post.title}</h3>
+        </a>
         <p class="blog-excerpt">${post.excerpt || ''}</p>
         <div class="blog-footer">
             <span class="blog-date">${dateStr}</span>
@@ -419,6 +438,152 @@ function createBlogCard(post) {
     return card;
 }
 
+
+// =============================================================================
+// ROUTER MODULE
+// =============================================================================
+
+function handleRoute() {
+    const hash = window.location.hash;
+    const homeView = document.getElementById('home-view');
+    const detailView = document.getElementById('detail-view');
+    
+    if (hash.startsWith('#/collections/products/entries/')) {
+        const slug = hash.replace('#/collections/products/entries/', '');
+        renderProductDetail(slug);
+        if (homeView) homeView.style.display = 'none';
+        if (detailView) detailView.style.display = 'block';
+        window.scrollTo(0, 0);
+    } else if (hash.startsWith('#/collections/blog/entries/')) {
+        const slug = hash.replace('#/collections/blog/entries/', '');
+        renderBlogDetail(slug);
+        if (homeView) homeView.style.display = 'none';
+        if (detailView) detailView.style.display = 'block';
+        window.scrollTo(0, 0);
+    } else {
+        // Home view
+        if (homeView) homeView.style.display = 'block';
+        if (detailView) {
+            detailView.style.display = 'none';
+            detailView.innerHTML = ''; // cleanup
+        }
+    }
+}
+
+window.addEventListener('hashchange', handleRoute);
+
+async function renderProductDetail(slug) {
+    const detailView = document.getElementById('detail-view');
+    // Using inline style for loader as css might not load instantly
+    detailView.innerHTML = '<div style="padding: 100px; text-align: center; color: var(--gold-light);">Đang tải thông tin...</div>';
+    
+    const product = await fetchJSON(`./data/products/${slug}.json`);
+    if (!product) {
+        detailView.innerHTML = '<div style="padding: 100px; text-align: center; color: var(--text-dark);"><h3>Sản phẩm không tồn tại</h3><a href="#/" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Quay lại trang chủ</a></div>';
+        return;
+    }
+    
+    let discountPercent = 0;
+    if (product.original_price && product.current_price && product.original_price > product.current_price) {
+        discountPercent = Math.round((1 - product.current_price / product.original_price) * 100);
+    }
+    
+    const currentFormatted = formatPrice(product.current_price);
+    const originalFormatted = product.original_price > product.current_price ? formatPrice(product.original_price) : '';
+    
+    document.title = `${product.title} | MTH Beauty`;
+    
+    detailView.innerHTML = `
+        <div class="product-detail-layout container">
+            <div class="product-detail-image-sec">
+                <div class="product-detail-image-wrapper">
+                    ${discountPercent > 0 ? `<span class="detail-badge badge-sale">-${discountPercent}%</span>` : ''}
+                    ${product.badge ? `<span class="detail-badge badge-hot">${product.badge}</span>` : ''}
+                    <img src="${product.image}" alt="${product.title}">
+                </div>
+            </div>
+            <div class="product-detail-info-sec">
+                <nav class="breadcrumb">
+                    <a href="#/">Trang chủ</a> <span class="divider">/</span> <span>Sản phẩm</span>
+                </nav>
+                <div class="detail-vendor">${product.vendor || 'MTH Beauty'}</div>
+                <h1 class="detail-title">${product.title}</h1>
+                <div class="detail-price-row">
+                    <span class="detail-price-current">${currentFormatted}</span>
+                    ${originalFormatted ? `<span class="detail-price-old">${originalFormatted}</span>` : ''}
+                </div>
+                <div class="detail-description">
+                    ${product.description ? `<p>${product.description.replace(/\\n/g, '<br>')}</p>` : ''}
+                </div>
+                <div class="detail-actions">
+                    <button class="btn btn-primary btn-add-full">THÊM VÀO GIỎ HÀNG</button>
+                    <button class="btn btn-outline btn-wishlist" aria-label="Thêm mục yêu thích">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                </div>
+                <div class="detail-policies">
+                    <div class="policy-item">
+                        <span class="policy-icon">✓</span> Tự hào phân phối chính hãng 100%
+                    </div>
+                    <div class="policy-item">
+                        <span class="policy-icon">✓</span> Giao hàng siêu tốc trong 2h tại TP.HCM
+                    </div>
+                    <div class="policy-item">
+                        <span class="policy-icon">✓</span> Tích điểm 5% cho thành viên V.I.P
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+async function renderBlogDetail(slug) {
+    const detailView = document.getElementById('detail-view');
+    detailView.innerHTML = '<div style="padding: 100px; text-align: center; color: var(--gold-light);">Đang tải bài viết...</div>';
+    
+    const post = await fetchJSON(`./data/blog/${slug}.json`);
+    if (!post) {
+        detailView.innerHTML = '<div style="padding: 100px; text-align: center; color: var(--text-dark);"><h3>Bài viết không tồn tại</h3><a href="#/" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Quay lại trang chủ</a></div>';
+        return;
+    }
+    
+    let dateStr = '';
+    if (post.date) {
+        const d = new Date(post.date);
+        const months = ['Tháng 01', 'Tháng 02', 'Tháng 03', 'Tháng 04', 'Tháng 05', 'Tháng 06',
+                        'Tháng 07', 'Tháng 08', 'Tháng 09', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
+        dateStr = `${d.getDate()} ${months[d.getMonth()]}, ${d.getFullYear()}`;
+    }
+    
+    document.title = `${post.title} | MTH Beauty`;
+    
+    let bodyHTML = post.body || '';
+    bodyHTML = bodyHTML.replace(/\\n\\n/g, '</p><p>').replace(/\\n/g, '<br>');
+    if (!bodyHTML.startsWith('<p>')) bodyHTML = '<p>' + bodyHTML + '</p>';
+    
+    detailView.innerHTML = `
+        <article class="blog-detail-layout container">
+            <header class="blog-detail-header">
+                <nav class="breadcrumb">
+                    <a href="#/">Trang chủ</a> <span class="divider">/</span> <span>Blog</span> <span class="divider">/</span> <span>${post.category || 'Tin tức'}</span>
+                </nav>
+                <div class="blog-detail-meta">
+                    <span class="tag-category">${post.category || ''}</span>
+                    <span class="tag-date">${dateStr}</span>
+                </div>
+                <h1 class="blog-detail-title">${post.title}</h1>
+                ${post.excerpt ? `<p class="blog-detail-excerpt">${post.excerpt}</p>` : ''}
+            </header>
+            ${post.thumbnail ? `
+            <figure class="blog-detail-hero">
+                <img src="${post.thumbnail}" alt="${post.title}">
+            </figure>` : ''}
+            <div class="blog-detail-content">
+                ${bodyHTML}
+            </div>
+        </article>
+    `;
+}
 
 // =============================================================================
 // UTILITIES
