@@ -114,9 +114,9 @@ async function initBannerCarousel() {
     // Fetch banner data
     let banners = [];
     try {
-        const index = await fetchJSON('./data/content-index.json');
+        const index = await fetchJSON('/data/content-index.json');
         if (index && index.banners) {
-            const bannerPromises = index.banners.map(path => fetchJSON(`./data/${path}`));
+            const bannerPromises = index.banners.map(path => fetchJSON(`/data/${path}`));
             const results = await Promise.allSettled(bannerPromises);
             banners = results
                 .filter(r => r.status === 'fulfilled' && r.value)
@@ -261,14 +261,14 @@ async function initBannerCarousel() {
 // =============================================================================
 async function initDynamicContent() {
     try {
-        const index = await fetchJSON('./data/content-index.json');
+        const index = await fetchJSON('/data/content-index.json');
         if (!index) return;
 
         // Load all products
         let allProducts = [];
         if (index.products) {
             const results = await Promise.allSettled(
-                index.products.map(path => fetchJSON(`./data/${path}`).then(data => {
+                index.products.map(path => fetchJSON(`/data/${path}`).then(data => {
                     if (data) data._slug = path.split('/').pop().replace('.json', '');
                     return data;
                 }))
@@ -310,11 +310,29 @@ async function initDynamicContent() {
             });
         });
 
+        // Render dynamic category grids on subpages
+        document.querySelectorAll('.dynamic-grid[data-category]').forEach(grid => {
+            const cat = grid.getAttribute('data-category');
+            const filtered = allProducts.filter(p => {
+                if (Array.isArray(p.category)) return p.category.includes(cat);
+                return p.category === cat;
+            });
+            filtered.forEach(product => {
+                let badgeText = 'HOT';
+                let badgeClass = 'badge-combo';
+                if (product.tags && product.tags.length > 0) badgeText = product.tags[0].toUpperCase();
+                // Append instead of overwrite
+                const div = document.createElement('div');
+                div.innerHTML = createDealCard(product, badgeText, badgeClass);
+                grid.appendChild(div.firstElementChild);
+            });
+        });
+
         // Load and render blog posts
         const blogGrid = document.getElementById('homepage-blog-grid');
         if (blogGrid && index.blog) {
             const blogResults = await Promise.allSettled(
-                index.blog.map(path => fetchJSON(`./data/${path}`).then(data => {
+                index.blog.map(path => fetchJSON(`/data/${path}`).then(data => {
                     if (data) data._slug = path.split('/').pop().replace('.json', '');
                     return data;
                 }))
@@ -380,16 +398,16 @@ function createProductCard(product) {
     card.innerHTML = `
         <div class="product-image-wrapper">
             ${badgesHTML}
-            <a href="#/collections/products/entries/${product._slug}">
+            <a href="/#/collections/products/entries/${product._slug}">
                 <img src="${product.image}" alt="${product.title}" class="product-image" loading="lazy">
             </a>
             <div class="product-action-overlay">
-                <a href="#/collections/products/entries/${product._slug}" class="btn btn-primary btn-buy" style="text-decoration: none; text-align: center;">XEM CHI TIẾT</a>
+                <a href="/#/collections/products/entries/${product._slug}" class="btn btn-primary btn-buy" style="text-decoration: none; text-align: center;">XEM CHI TIẾT</a>
             </div>
         </div>
         <div class="product-info">
             <span class="product-vendor">${product.vendor || ''}</span>
-            <a href="#/collections/products/entries/${product._slug}" style="text-decoration: none; color: inherit;">
+            <a href="/#/collections/products/entries/${product._slug}" style="text-decoration: none; color: inherit;">
                 <h3 class="product-name">${product.title}</h3>
             </a>
             <div class="product-price-row">
@@ -420,12 +438,12 @@ function createBlogCard(post) {
 
     card.innerHTML = `
         <div class="blog-image-wrapper">
-            <a href="#/collections/blog/entries/${post._slug}">
+            <a href="/#/collections/blog/entries/${post._slug}">
                 <img src="${post.thumbnail || ''}" alt="${post.title}" class="blog-image" loading="lazy">
             </a>
         </div>
         <div class="blog-category">${post.category || ''}</div>
-        <a href="#/collections/blog/entries/${post._slug}" style="text-decoration: none; color: inherit;">
+        <a href="/#/collections/blog/entries/${post._slug}" style="text-decoration: none; color: inherit;">
             <h3 class="blog-title">${post.title}</h3>
         </a>
         <p class="blog-excerpt">${post.excerpt || ''}</p>
@@ -440,8 +458,40 @@ function createBlogCard(post) {
 
 
 // =============================================================================
-// ROUTER MODULE
+// ROUTER & CARDS MODULE
 // =============================================================================
+
+function createDealCard(product, badgeText = 'HOT', badgeClass = 'badge-combo') {
+    const currentFormatted = formatPrice(product.current_price);
+    const originalFormatted = product.original_price > product.current_price ? formatPrice(product.original_price) : '';
+    const discountPercent = product.original_price > product.current_price 
+        ? Math.round((1 - product.current_price / product.original_price) * 100) : 0;
+
+    return `
+        <article class="deal-card">
+            <div class="deal-card-image-wrapper">
+                ${badgeText ? `<span class="deal-card-badge ${badgeClass}">${badgeText}</span>` : ''}
+                <a href="/#/collections/products/entries/${product._slug}">
+                    <img src="${product.image || ''}" alt="${product.title}" class="deal-card-image" loading="lazy">
+                </a>
+            </div>
+            <div class="deal-card-body">
+                <span class="deal-card-vendor">${product.vendor || 'MTH Beauty'}</span>
+                <a href="/#/collections/products/entries/${product._slug}" style="text-decoration:none; color:inherit;">
+                    <h3 class="deal-card-title">${product.title}</h3>
+                </a>
+                <p class="deal-card-desc">${product.description ? product.description.substring(0, 100) + '...' : ''}</p>
+            </div>
+            <div class="deal-card-footer">
+                <div class="deal-price-block">
+                    ${originalFormatted ? `<span class="deal-price-original">${originalFormatted}</span>` : ''}
+                    <span class="deal-price-current">${currentFormatted}</span>
+                </div>
+                ${discountPercent > 0 ? `<span class="deal-discount-tag">-${discountPercent}%</span>` : ''}
+            </div>
+        </article>
+    `;
+}
 
 function handleRoute() {
     const hash = window.location.hash;
@@ -477,7 +527,7 @@ async function renderProductDetail(slug) {
     // Using inline style for loader as css might not load instantly
     detailView.innerHTML = '<div style="padding: 100px; text-align: center; color: var(--gold-light);">Đang tải thông tin...</div>';
     
-    const product = await fetchJSON(`./data/products/${slug}.json`);
+    const product = await fetchJSON(`/data/products/${slug}.json`);
     if (!product) {
         detailView.innerHTML = '<div style="padding: 100px; text-align: center; color: var(--text-dark);"><h3>Sản phẩm không tồn tại</h3><a href="#/" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Quay lại trang chủ</a></div>';
         return;
@@ -541,9 +591,9 @@ async function renderBlogDetail(slug) {
     const detailView = document.getElementById('detail-view');
     detailView.innerHTML = '<div style="padding: 100px; text-align: center; color: var(--gold-light);">Đang tải bài viết...</div>';
     
-    const post = await fetchJSON(`./data/blog/${slug}.json`);
+    const post = await fetchJSON(`/data/blog/${slug}.json`);
     if (!post) {
-        detailView.innerHTML = '<div style="padding: 100px; text-align: center; color: var(--text-dark);"><h3>Bài viết không tồn tại</h3><a href="#/" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Quay lại trang chủ</a></div>';
+        detailView.innerHTML = '<div style="padding: 100px; text-align: center; color: var(--text-dark);"><h3>Bài viết không tồn tại</h3><a href="/#/" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Quay lại trang chủ</a></div>';
         return;
     }
     
