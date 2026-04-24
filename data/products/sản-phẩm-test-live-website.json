@@ -1,0 +1,18 @@
+{
+  "title": "Sản phẩm Test Live Website",
+  "category": "Dưỡng Da",
+  "vendor": "MTH Beauty",
+  "original_price": 100000,
+  "current_price": 50000,
+  "description": "San pham test cho browser agent",
+  "image": "/images/uploads/COMBO LÀM SẠCH.png",
+  "badge": "",
+  "shopee_link": "",
+  "detail_description": "",
+  "visible": true,
+  "display_pages": [
+    "uu-dai-theo-chuong-trinh",
+    "uu-dai-theo-thuong-hieu"
+  ],
+  "sort_order": 0
+}
