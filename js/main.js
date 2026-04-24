@@ -406,12 +406,12 @@ function createProductCard(product) {
         discountPercent = Math.round((1 - product.current_price / product.original_price) * 100);
     }
 
-    // Build badges (Only display discount percentage if available)
+    // Build badges
     let badgesHTML = '';
     if (discountPercent > 0) {
-        badgesHTML = `<div class="product-badges-container">
-            <span class="product-badge badge-sale">-${discountPercent}%</span>
-        </div>`;
+        badgesHTML = '<div class="product-badges-container">';
+        badgesHTML += `<span class="product-badge badge-sale">-${discountPercent}%</span>`;
+        badgesHTML += '</div>';
     }
 
     // Format prices 
@@ -583,7 +583,6 @@ async function renderProductDetail(slug) {
             <div class="product-detail-image-sec">
                 <div class="product-detail-image-wrapper">
                     ${discountPercent > 0 ? `<span class="detail-badge badge-sale">-${discountPercent}%</span>` : ''}
-                    ${product.badge ? `<span class="detail-badge badge-hot">${product.badge}</span>` : ''}
                     <img src="${product.image}" alt="${product.title}">
                 </div>
             </div>
