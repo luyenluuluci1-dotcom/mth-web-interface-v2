@@ -350,18 +350,9 @@ async function initDynamicContent() {
             // Remove static content
             grid.innerHTML = '';
             filtered.forEach(product => {
-                let badgeText = product.badge || 'HOT';
-                let badgeClass = 'badge-combo';
-                if ((product.badge && product.badge.toLowerCase().includes('sale')) || (product.badge && product.badge.includes('%'))) {
-                    badgeClass = 'badge-sale';
-                }
-                if (product.badge && product.badge.toLowerCase().includes('gift')) {
-                    badgeClass = 'badge-voucher';
-                }
-
                 // Append instead of overwrite
                 const div = document.createElement('div');
-                div.innerHTML = createDealCard(product, badgeText, badgeClass);
+                div.innerHTML = createDealCard(product);
                 grid.appendChild(div.firstElementChild);
             });
         });
@@ -415,17 +406,12 @@ function createProductCard(product) {
         discountPercent = Math.round((1 - product.current_price / product.original_price) * 100);
     }
 
-    // Build badges
+    // Build badges (Only display discount percentage if available)
     let badgesHTML = '';
-    if (discountPercent > 0 || product.badge) {
-        badgesHTML = '<div class="product-badges-container">';
-        if (discountPercent > 0) {
-            badgesHTML += `<span class="product-badge badge-sale">-${discountPercent}%</span>`;
-        }
-        if (product.badge) {
-            badgesHTML += `<span class="product-badge badge-hot">${product.badge}</span>`;
-        }
-        badgesHTML += '</div>';
+    if (discountPercent > 0) {
+        badgesHTML = `<div class="product-badges-container">
+            <span class="product-badge badge-sale">-${discountPercent}%</span>
+        </div>`;
     }
 
     // Format prices 
@@ -499,7 +485,7 @@ function createBlogCard(post) {
 // ROUTER & CARDS MODULE
 // =============================================================================
 
-function createDealCard(product, badgeText = 'HOT', badgeClass = 'badge-combo') {
+function createDealCard(product) {
     const currentFormatted = formatPrice(product.current_price);
     const originalFormatted = product.original_price > product.current_price ? formatPrice(product.original_price) : '';
     const discountPercent = product.original_price > product.current_price 
@@ -508,7 +494,7 @@ function createDealCard(product, badgeText = 'HOT', badgeClass = 'badge-combo') 
     return `
         <article class="deal-card">
             <div class="deal-card-image-wrapper">
-                ${badgeText ? `<span class="deal-card-badge ${badgeClass}">${badgeText}</span>` : ''}
+                ${discountPercent > 0 ? `<span class="deal-card-badge badge-sale">-${discountPercent}%</span>` : ''}
                 <a href="#/collections/products/entries/${product._slug}">
                     <img src="${product.image || ''}" alt="${product.title}" class="deal-card-image" loading="lazy">
                 </a>
@@ -525,7 +511,6 @@ function createDealCard(product, badgeText = 'HOT', badgeClass = 'badge-combo') 
                     ${originalFormatted ? `<span class="deal-price-original">${originalFormatted}</span>` : ''}
                     <span class="deal-price-current">${currentFormatted}</span>
                 </div>
-                ${discountPercent > 0 ? `<span class="deal-discount-tag">-${discountPercent}%</span>` : ''}
             </div>
         </article>
     `;
