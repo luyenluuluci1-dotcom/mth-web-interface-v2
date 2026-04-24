@@ -50,6 +50,8 @@ collections:
       - {label: "Mô tả ngắn", name: "description", widget: "text"}
       - {label: "Ảnh sản phẩm", name: "image", widget: "image"}
       - {label: "Nhãn nổi bật (Badge)", name: "badge", widget: "string", required: false, hint: "Vd: DA DẦU MỤN, COMBO, HOT..."}
+      - {label: "Link Shopee", name: "shopee_link", widget: "string", required: false, hint: "Link sản phẩm trên Shopee. Nếu có, khách bấm Đặt Hàng sẽ mở Shopee. Nếu để trống, khách sẽ điền biểu mẫu đặt hàng."}
+      - {label: "Mô tả chi tiết", name: "detail_description", widget: "markdown", required: false, hint: "Mô tả chi tiết sản phẩm (thành phần, cách dùng, lưu ý...). Hiển thị ở trang chi tiết sản phẩm."}
       - {label: "Hiển thị", name: "visible", widget: "boolean", default: true, hint: "Bật/tắt hiển thị sản phẩm trên website"}
       - label: "Hiển thị tại các trang"
         name: "display_pages"

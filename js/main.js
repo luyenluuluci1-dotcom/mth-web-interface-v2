@@ -7,7 +7,13 @@
  * 1. Mobile Menu
  * 2. Hero Banner Carousel
  * 3. Dynamic Content Loader (Products + Blog)
+ * 4. Product Detail & Order System
  */
+
+// =============================================================================
+// CONFIG — Google Apps Script Web App URL (đơn hàng & tracking)
+// =============================================================================
+const ORDER_SCRIPT_URL = 'REPLACE_WITH_YOUR_GOOGLE_APPS_SCRIPT_URL';
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log("MTH Web Interface initialized successfully.");
@@ -524,7 +530,6 @@ window.addEventListener('hashchange', handleRoute);
 
 async function renderProductDetail(slug) {
     const detailView = document.getElementById('detail-view');
-    // Using inline style for loader as css might not load instantly
     detailView.innerHTML = '<div style="padding: 100px; text-align: center; color: var(--gold-light);">Đang tải thông tin...</div>';
     
     const product = await fetchJSON(`/data/products/${slug}.json`);
@@ -532,6 +537,7 @@ async function renderProductDetail(slug) {
         detailView.innerHTML = '<div style="padding: 100px; text-align: center; color: var(--text-dark);"><h3>Sản phẩm không tồn tại</h3><a href="#/" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Quay lại trang chủ</a></div>';
         return;
     }
+    product._slug = slug;
     
     let discountPercent = 0;
     if (product.original_price && product.current_price && product.original_price > product.current_price) {
@@ -540,6 +546,16 @@ async function renderProductDetail(slug) {
     
     const currentFormatted = formatPrice(product.current_price);
     const originalFormatted = product.original_price > product.current_price ? formatPrice(product.original_price) : '';
+    
+    // Render detail_description (markdown → HTML)
+    let detailDescHTML = '';
+    if (product.detail_description) {
+        detailDescHTML = `
+            <div class="detail-full-description">
+                <h2 class="detail-section-heading">Thông tin chi tiết</h2>
+                <div class="detail-markdown-content">${simpleMarkdown(product.detail_description)}</div>
+            </div>`;
+    }
     
     document.title = `${product.title} | MTH Beauty`;
     
@@ -566,7 +582,7 @@ async function renderProductDetail(slug) {
                     ${product.description ? `<p>${product.description.replace(/\\n/g, '<br>')}</p>` : ''}
                 </div>
                 <div class="detail-actions">
-                    <button class="btn btn-primary btn-add-full">THÊM VÀO GIỎ HÀNG</button>
+                    <button class="btn btn-primary btn-order-now" id="btn-order-now">ĐẶT HÀNG NGAY</button>
                     <button class="btn btn-outline btn-wishlist" aria-label="Thêm mục yêu thích">
                         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     </button>
@@ -582,9 +598,16 @@ async function renderProductDetail(slug) {
                         <span class="policy-icon">✓</span> Tích điểm 5% cho thành viên V.I.P
                     </div>
                 </div>
+                ${detailDescHTML}
             </div>
         </div>
     `;
+    
+    // Wire up the order button
+    const orderBtn = document.getElementById('btn-order-now');
+    if (orderBtn) {
+        orderBtn.addEventListener('click', () => handleOrderClick(product));
+    }
 }
 
 async function renderBlogDetail(slug) {
@@ -633,6 +656,211 @@ async function renderBlogDetail(slug) {
             </div>
         </article>
     `;
+}
+
+// =============================================================================
+// ORDER SYSTEM MODULE
+// =============================================================================
+
+/**
+ * Handle the "ĐẶT HÀNG NGAY" button click.
+ * If product has shopee_link → open Shopee + record click.
+ * Otherwise → show order form modal.
+ */
+function handleOrderClick(product) {
+    if (product.shopee_link && product.shopee_link.trim() !== '') {
+        // Open Shopee in new tab
+        window.open(product.shopee_link, '_blank');
+        // Record the click
+        recordShopeeClick(product);
+    } else {
+        // Show order form
+        showOrderModal(product);
+    }
+}
+
+/**
+ * Record a Shopee redirect click to Google Sheet.
+ */
+function recordShopeeClick(product) {
+    const data = {
+        type: 'shopee_click',
+        product_name: product.title,
+        product_slug: product._slug || '',
+        shopee_link: product.shopee_link,
+        price: product.current_price,
+        timestamp: new Date().toISOString()
+    };
+    
+    if (ORDER_SCRIPT_URL && !ORDER_SCRIPT_URL.includes('REPLACE_WITH')) {
+        fetch(ORDER_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).catch(err => console.warn('Shopee click tracking failed:', err));
+    }
+}
+
+/**
+ * Show the order form modal for direct ordering.
+ */
+function showOrderModal(product) {
+    // Remove existing modal if any
+    const existing = document.getElementById('order-modal-overlay');
+    if (existing) existing.remove();
+    
+    const overlay = document.createElement('div');
+    overlay.id = 'order-modal-overlay';
+    overlay.className = 'order-modal-overlay';
+    
+    overlay.innerHTML = `
+        <div class="order-modal">
+            <button class="order-modal-close" id="order-modal-close" aria-label="Đóng">&times;</button>
+            <div class="order-modal-header">
+                <h2 class="order-modal-title">Đặt Hàng</h2>
+                <p class="order-modal-product-name">${product.title}</p>
+                <p class="order-modal-price">${formatPrice(product.current_price)}</p>
+            </div>
+            <form id="order-form" class="order-form">
+                <div class="order-form-group">
+                    <label for="order-name">Họ tên <span class="required">*</span></label>
+                    <input type="text" id="order-name" name="name" required placeholder="Nhập họ tên đầy đủ">
+                </div>
+                <div class="order-form-group">
+                    <label for="order-phone">Số điện thoại <span class="required">*</span></label>
+                    <input type="tel" id="order-phone" name="phone" required placeholder="0912 345 678">
+                </div>
+                <div class="order-form-group">
+                    <label for="order-address">Địa chỉ <span class="required">*</span></label>
+                    <textarea id="order-address" name="address" required placeholder="Nhập địa chỉ nhận hàng để giao hàng chính xác" rows="2"></textarea>
+                    <span class="order-field-hint">Cần địa chỉ chi tiết để giao hàng đúng nơi</span>
+                </div>
+                <div class="order-form-row">
+                    <div class="order-form-group">
+                        <label for="order-birthday">Sinh nhật <span class="required">*</span></label>
+                        <input type="date" id="order-birthday" name="birthday" required>
+                    </div>
+                    <div class="order-form-group">
+                        <label for="order-quantity">Số lượng <span class="required">*</span></label>
+                        <input type="number" id="order-quantity" name="quantity" min="1" value="1" required>
+                    </div>
+                </div>
+                <div class="order-form-group">
+                    <label for="order-note">Cảm nhận / Thắc mắc <span class="optional">(tùy chọn)</span></label>
+                    <textarea id="order-note" name="note" placeholder="Chia sẻ cảm nhận hoặc câu hỏi của bạn..." rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-submit-order" id="btn-submit-order">XÁC NHẬN ĐẶT HÀNG</button>
+            </form>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+    
+    // Animate in
+    requestAnimationFrame(() => overlay.classList.add('active'));
+    
+    // Close handlers
+    document.getElementById('order-modal-close').addEventListener('click', closeOrderModal);
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeOrderModal();
+    });
+    
+    // Form submit
+    document.getElementById('order-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        submitOrder(product);
+    });
+}
+
+function closeOrderModal() {
+    const overlay = document.getElementById('order-modal-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            overlay.remove();
+            document.body.style.overflow = '';
+        }, 300);
+    }
+}
+
+/**
+ * Submit order data to Google Apps Script.
+ */
+async function submitOrder(product) {
+    const form = document.getElementById('order-form');
+    const submitBtn = document.getElementById('btn-submit-order');
+    const originalText = submitBtn.textContent;
+    
+    // Disable button during submit
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Đang gửi...';
+    
+    const data = {
+        type: 'order',
+        product_name: product.title,
+        product_slug: product._slug || '',
+        price: product.current_price,
+        customer_name: document.getElementById('order-name').value.trim(),
+        customer_phone: document.getElementById('order-phone').value.trim(),
+        customer_address: document.getElementById('order-address').value.trim(),
+        customer_birthday: document.getElementById('order-birthday').value,
+        quantity: parseInt(document.getElementById('order-quantity').value) || 1,
+        note: document.getElementById('order-note').value.trim(),
+        timestamp: new Date().toISOString()
+    };
+    
+    try {
+        if (ORDER_SCRIPT_URL && !ORDER_SCRIPT_URL.includes('REPLACE_WITH')) {
+            await fetch(ORDER_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+        }
+        
+        // Show success state
+        const modal = document.querySelector('.order-modal');
+        if (modal) {
+            modal.innerHTML = `
+                <div class="order-success">
+                    <div class="order-success-icon">✓</div>
+                    <h2 class="order-success-title">Đặt Hàng Thành Công!</h2>
+                    <p class="order-success-msg">Cảm ơn <strong>${data.customer_name}</strong> đã tin tưởng Mai Trinh Hồ.<br>Chúng tôi sẽ liên hệ bạn qua số <strong>${data.customer_phone}</strong> trong thời gian sớm nhất.</p>
+                    <button class="btn btn-primary" onclick="closeOrderModal()" style="margin-top: 24px;">ĐÓNG</button>
+                </div>
+            `;
+        }
+    } catch (err) {
+        console.warn('Order submission failed:', err);
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+        alert('Có lỗi xảy ra. Vui lòng thử lại hoặc liên hệ hotline.');
+    }
+}
+
+/**
+ * Convert simple markdown to HTML (for detail_description).
+ */
+function simpleMarkdown(text) {
+    if (!text) return '';
+    let html = text
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/^- (.+)$/gm, '<li>$1</li>')
+        .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>');
+    if (!html.startsWith('<h') && !html.startsWith('<ul')) {
+        html = '<p>' + html + '</p>';
+    }
+    return html;
 }
 
 // =============================================================================
