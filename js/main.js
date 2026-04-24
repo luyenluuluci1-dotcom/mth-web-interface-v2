@@ -13,7 +13,7 @@
 // =============================================================================
 // CONFIG — Google Apps Script Web App URL (đơn hàng & tracking)
 // =============================================================================
-const ORDER_SCRIPT_URL = 'REPLACE_WITH_YOUR_GOOGLE_APPS_SCRIPT_URL';
+const ORDER_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIN7kIEX62jmqM_iStqs1u9Xy9uaDMJ15SjTnvid6-7_GHQMoKYrlN5wHGb8gTi3Am/exec';
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log("MTH Web Interface initialized successfully.");
