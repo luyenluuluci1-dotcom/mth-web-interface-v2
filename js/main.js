@@ -801,11 +801,11 @@ async function submitOrder(product) {
         type: 'order',
         product_name: product.title,
         product_slug: product._slug || '',
-        price: product.current_price,
-        customer_name: document.getElementById('order-name').value.trim(),
-        customer_phone: document.getElementById('order-phone').value.trim(),
-        customer_address: document.getElementById('order-address').value.trim(),
-        customer_birthday: document.getElementById('order-birthday').value,
+        product_price: product.current_price,
+        name: document.getElementById('order-name').value.trim(),
+        phone: document.getElementById('order-phone').value.trim(),
+        address: document.getElementById('order-address').value.trim(),
+        birthday: document.getElementById('order-birthday').value,
         quantity: parseInt(document.getElementById('order-quantity').value) || 1,
         note: document.getElementById('order-note').value.trim(),
         timestamp: new Date().toISOString()
@@ -828,7 +828,7 @@ async function submitOrder(product) {
                 <div class="order-success">
                     <div class="order-success-icon">✓</div>
                     <h2 class="order-success-title">Đặt Hàng Thành Công!</h2>
-                    <p class="order-success-msg">Cảm ơn <strong>${data.customer_name}</strong> đã tin tưởng Mai Trinh Hồ.<br>Chúng tôi sẽ liên hệ bạn qua số <strong>${data.customer_phone}</strong> trong thời gian sớm nhất.</p>
+                    <p class="order-success-msg">Cảm ơn <strong>${data.name}</strong> đã tin tưởng Mai Trinh Hồ.<br>Chúng tôi sẽ liên hệ bạn qua số <strong>${data.phone}</strong> trong thời gian sớm nhất.</p>
                     <button class="btn btn-primary" onclick="closeOrderModal()" style="margin-top: 24px;">ĐÓNG</button>
                 </div>
             `;
