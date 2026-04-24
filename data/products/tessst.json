@@ -1,0 +1,20 @@
+{
+  "title": "tessst",
+  "category": "Dưỡng Da",
+  "vendor": "MTH Beauty",
+  "original_price": 450000,
+  "current_price": 300000,
+  "description": "3455686789",
+  "image": "/images/uploads/sgfb007.jpeg",
+  "badge": "",
+  "shopee_link": "",
+  "detail_description": "677uuuu",
+  "visible": true,
+  "display_pages": [
+    "homepage",
+    "uu-dai-theo-chuong-trinh",
+    "uu-dai-theo-thuong-hieu",
+    "san-pham-theo-nhu-cau"
+  ],
+  "sort_order": 2
+}
