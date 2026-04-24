@@ -872,7 +872,12 @@ function simpleMarkdown(text) {
  */
 async function fetchJSON(url) {
     try {
-        const res = await fetch(url);
+        let fetchUrl = url;
+        // Bắt buộc tải mới index file để nhận biết các file được update version
+        if (url.includes('content-index.json')) {
+            fetchUrl = `${url}?_t=${new Date().getTime()}`;
+        }
+        const res = await fetch(fetchUrl);
         if (!res.ok) return null;
         return await res.json();
     } catch {

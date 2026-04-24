@@ -10,7 +10,10 @@ function getJsonFiles(dir) {
     
     return fs.readdirSync(fullPath)
         .filter(file => file.endsWith('.json'))
-        .map(file => `${dir}/${file}`);
+        .map(file => {
+            const stat = fs.statSync(path.join(fullPath, file));
+            return `${dir}/${file}?v=${stat.mtimeMs}`;
+        });
 }
 
 try {

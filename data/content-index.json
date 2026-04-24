@@ -1,21 +1,22 @@
 {
   "banners": [
-    "banners/banner-flash-sale.json",
-    "banners/banner-kham-pha-mua-he.json",
-    "banners/banner-makeup-trend.json",
-    "banners/banner-skincare-premium.json",
-    "banners/banner-thuong-hieu.json"
+    "banners/banner-flash-sale.json?v=1776854910388.4788",
+    "banners/banner-kham-pha-mua-he.json?v=1776854910388.4788",
+    "banners/banner-makeup-trend.json?v=1776854910389.0098",
+    "banners/banner-skincare-premium.json?v=1776854910389.0098",
+    "banners/banner-thuong-hieu.json?v=1776854910389.548"
   ],
   "products": [
-    "products/kem-estee-lauder-night.json",
-    "products/nuoc-than-sk-ii.json",
-    "products/serum-shiseido-ultimune.json",
-    "products/son-bobbi-brown-luxe.json",
-    "products/test-1.json"
+    "products/kem-estee-lauder-night.json?v=1776854910390.6064",
+    "products/nuoc-than-sk-ii.json?v=1776855256548.1482",
+    "products/serum-shiseido-ultimune.json?v=1777023209474.9602",
+    "products/son-bobbi-brown-luxe.json?v=1776854910391.6482",
+    "products/test-01.json?v=1777029742567.5698",
+    "products/test-1.json?v=1776854910299.3125"
   ],
   "blog": [
-    "blog/2026-04-12-wellness-supplements.json",
-    "blog/2026-04-15-clean-girl-makeup.json",
-    "blog/2026-04-19-skincare-routine.json"
+    "blog/2026-04-12-wellness-supplements.json?v=1776854910389.548",
+    "blog/2026-04-15-clean-girl-makeup.json?v=1776854910390.0781",
+    "blog/2026-04-19-skincare-routine.json?v=1776854910390.0781"
   ]
 }
