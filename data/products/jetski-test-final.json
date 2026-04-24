@@ -1,0 +1,18 @@
+{
+  "title": "JETSKI-TEST-FINAL",
+  "category": "Dưỡng Da",
+  "vendor": "MTH Beauty",
+  "original_price": 1000000,
+  "current_price": 800000,
+  "description": "Day la mo ta san pham test cho Jetski.",
+  "image": "/images/uploads/COMBO LÀM SẠCH.png",
+  "badge": "",
+  "shopee_link": "",
+  "detail_description": "",
+  "visible": true,
+  "display_pages": [
+    "uu-dai-theo-chuong-trinh",
+    "uu-dai-theo-thuong-hieu"
+  ],
+  "sort_order": 0
+}
