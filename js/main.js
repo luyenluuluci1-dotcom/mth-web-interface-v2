@@ -324,6 +324,18 @@ async function initDynamicContent() {
             const badge = grid.getAttribute('data-badge');
             
             let filtered = allProducts;
+
+            // Page Context Filtering
+            const pathInfo = window.location.pathname;
+            let pageSlug = null;
+            if (pathInfo.includes('uu-dai-theo-chuong-trinh')) pageSlug = 'uu-dai-theo-chuong-trinh';
+            else if (pathInfo.includes('uu-dai-theo-thuong-hieu')) pageSlug = 'uu-dai-theo-thuong-hieu';
+            else if (pathInfo.includes('san-pham-theo-nhu-cau')) pageSlug = 'san-pham-theo-nhu-cau';
+
+            if (pageSlug) {
+                // Only include products that explicitly selected this page in CMS
+                filtered = filtered.filter(p => p.display_pages && Array.isArray(p.display_pages) && p.display_pages.includes(pageSlug));
+            }
             
             if (cat) {
                 filtered = filtered.filter(p => Array.isArray(p.category) ? p.category.includes(cat) : p.category === cat);
