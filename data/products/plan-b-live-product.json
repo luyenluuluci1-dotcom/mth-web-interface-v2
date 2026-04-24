@@ -1,0 +1,19 @@
+{
+  "title": "Plan-B-Live-Product",
+  "category": "Dưỡng Da",
+  "vendor": "MTH Beauty",
+  "original_price": 100000,
+  "current_price": 80000,
+  "description": "Test Plan B",
+  "image": "/images/uploads/COMBO LÀM SẠCH.png",
+  "badge": "",
+  "shopee_link": "",
+  "detail_description": "Detailed description for testing purpose.",
+  "visible": true,
+  "display_pages": [
+    "homepage",
+    "uu-dai-theo-chuong-trinh",
+    "uu-dai-theo-thuong-hieu"
+  ],
+  "sort_order": 0
+}
