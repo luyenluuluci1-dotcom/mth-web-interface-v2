@@ -1,0 +1,19 @@
+{
+  "title": "dummy-product-456",
+  "category": "Wellness",
+  "vendor": "MTH Beauty",
+  "original_price": 200000,
+  "current_price": 180000,
+  "description": "Day la san pham test tu dong.",
+  "image": "/images/uploads/COMBO LÀM SẠCH.png",
+  "badge": "",
+  "shopee_link": "",
+  "detail_description": "Detailed description for testing purpose.",
+  "visible": true,
+  "display_pages": [
+    "homepage",
+    "uu-dai-theo-chuong-trinh",
+    "uu-dai-theo-thuong-hieu"
+  ],
+  "sort_order": 0
+}
