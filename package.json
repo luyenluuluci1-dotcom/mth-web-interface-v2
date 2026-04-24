@@ -4,5 +4,8 @@
   "description": "Mai Trinh Ho Beauty Interface",
   "main": "index.html",
   "author": "Mai Trinh Ho",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/update-index.js"
+  }
 }
