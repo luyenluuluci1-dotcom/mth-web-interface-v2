@@ -1,0 +1,18 @@
+{
+  "title": "test 01",
+  "category": "Trang Điểm",
+  "vendor": "MTH Beauty 123",
+  "original_price": 900000,
+  "current_price": 750000,
+  "description": "dfghjfghbnxcv",
+  "image": "/images/uploads/thumb_1.png",
+  "badge": "",
+  "visible": true,
+  "display_pages": [
+    "homepage",
+    "uu-dai-theo-chuong-trinh",
+    "uu-dai-theo-thuong-hieu",
+    "san-pham-theo-nhu-cau"
+  ],
+  "sort_order": 4
+}
