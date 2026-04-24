@@ -94,8 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5. DYNAMIC CONTENT LOADER — Products & Blog from data/ JSON
     // =========================================================================
     const productGrids = document.querySelectorAll('.products-grid[data-section]');
+    const dynamicGrids = document.querySelectorAll('.dynamic-grid');
     const blogGrid = document.getElementById('homepage-blog-grid');
-    if (productGrids.length > 0 || blogGrid) {
+    if (productGrids.length > 0 || dynamicGrids.length > 0 || blogGrid) {
         initDynamicContent();
     }
     
@@ -317,16 +318,35 @@ async function initDynamicContent() {
         });
 
         // Render dynamic category grids on subpages
-        document.querySelectorAll('.dynamic-grid[data-category]').forEach(grid => {
+        document.querySelectorAll('.dynamic-grid').forEach(grid => {
             const cat = grid.getAttribute('data-category');
-            const filtered = allProducts.filter(p => {
-                if (Array.isArray(p.category)) return p.category.includes(cat);
-                return p.category === cat;
-            });
+            const vendor = grid.getAttribute('data-vendor');
+            const badge = grid.getAttribute('data-badge');
+            
+            let filtered = allProducts;
+            
+            if (cat) {
+                filtered = filtered.filter(p => Array.isArray(p.category) ? p.category.includes(cat) : p.category === cat);
+            }
+            if (vendor) {
+                filtered = filtered.filter(p => (p.vendor || '').toLowerCase() === vendor.toLowerCase());
+            }
+            if (badge) {
+                filtered = filtered.filter(p => (p.badge || '').toLowerCase().includes(badge.toLowerCase()));
+            }
+
+            // Remove static content
+            grid.innerHTML = '';
             filtered.forEach(product => {
-                let badgeText = 'HOT';
+                let badgeText = product.badge || 'HOT';
                 let badgeClass = 'badge-combo';
-                if (product.tags && product.tags.length > 0) badgeText = product.tags[0].toUpperCase();
+                if ((product.badge && product.badge.toLowerCase().includes('sale')) || (product.badge && product.badge.includes('%'))) {
+                    badgeClass = 'badge-sale';
+                }
+                if (product.badge && product.badge.toLowerCase().includes('gift')) {
+                    badgeClass = 'badge-voucher';
+                }
+
                 // Append instead of overwrite
                 const div = document.createElement('div');
                 div.innerHTML = createDealCard(product, badgeText, badgeClass);
@@ -404,16 +424,16 @@ function createProductCard(product) {
     card.innerHTML = `
         <div class="product-image-wrapper">
             ${badgesHTML}
-            <a href="/#/collections/products/entries/${product._slug}">
+            <a href="#/collections/products/entries/${product._slug}">
                 <img src="${product.image}" alt="${product.title}" class="product-image" loading="lazy">
             </a>
             <div class="product-action-overlay">
-                <a href="/#/collections/products/entries/${product._slug}" class="btn btn-primary btn-buy" style="text-decoration: none; text-align: center;">XEM CHI TIẾT</a>
+                <a href="#/collections/products/entries/${product._slug}" class="btn btn-primary btn-buy" style="text-decoration: none; text-align: center;">XEM CHI TIẾT</a>
             </div>
         </div>
         <div class="product-info">
             <span class="product-vendor">${product.vendor || ''}</span>
-            <a href="/#/collections/products/entries/${product._slug}" style="text-decoration: none; color: inherit;">
+            <a href="#/collections/products/entries/${product._slug}" style="text-decoration: none; color: inherit;">
                 <h3 class="product-name">${product.title}</h3>
             </a>
             <div class="product-price-row">
@@ -444,12 +464,12 @@ function createBlogCard(post) {
 
     card.innerHTML = `
         <div class="blog-image-wrapper">
-            <a href="/#/collections/blog/entries/${post._slug}">
+            <a href="#/collections/blog/entries/${post._slug}">
                 <img src="${post.thumbnail || ''}" alt="${post.title}" class="blog-image" loading="lazy">
             </a>
         </div>
         <div class="blog-category">${post.category || ''}</div>
-        <a href="/#/collections/blog/entries/${post._slug}" style="text-decoration: none; color: inherit;">
+        <a href="#/collections/blog/entries/${post._slug}" style="text-decoration: none; color: inherit;">
             <h3 class="blog-title">${post.title}</h3>
         </a>
         <p class="blog-excerpt">${post.excerpt || ''}</p>
@@ -477,13 +497,13 @@ function createDealCard(product, badgeText = 'HOT', badgeClass = 'badge-combo') 
         <article class="deal-card">
             <div class="deal-card-image-wrapper">
                 ${badgeText ? `<span class="deal-card-badge ${badgeClass}">${badgeText}</span>` : ''}
-                <a href="/#/collections/products/entries/${product._slug}">
+                <a href="#/collections/products/entries/${product._slug}">
                     <img src="${product.image || ''}" alt="${product.title}" class="deal-card-image" loading="lazy">
                 </a>
             </div>
             <div class="deal-card-body">
                 <span class="deal-card-vendor">${product.vendor || 'MTH Beauty'}</span>
-                <a href="/#/collections/products/entries/${product._slug}" style="text-decoration:none; color:inherit;">
+                <a href="#/collections/products/entries/${product._slug}" style="text-decoration:none; color:inherit;">
                     <h3 class="deal-card-title">${product.title}</h3>
                 </a>
                 <p class="deal-card-desc">${product.description ? product.description.substring(0, 100) + '...' : ''}</p>
@@ -505,13 +525,15 @@ function handleRoute() {
     const detailView = document.getElementById('detail-view');
     
     if (hash.startsWith('#/collections/products/entries/')) {
-        const slug = hash.replace('#/collections/products/entries/', '');
+        const slugWithQuery = hash.replace('#/collections/products/entries/', '');
+        const slug = slugWithQuery.split('?')[0];
         renderProductDetail(slug);
         if (homeView) homeView.style.display = 'none';
         if (detailView) detailView.style.display = 'block';
         window.scrollTo(0, 0);
     } else if (hash.startsWith('#/collections/blog/entries/')) {
-        const slug = hash.replace('#/collections/blog/entries/', '');
+        const slugWithQuery = hash.replace('#/collections/blog/entries/', '');
+        const slug = slugWithQuery.split('?')[0];
         renderBlogDetail(slug);
         if (homeView) homeView.style.display = 'none';
         if (detailView) detailView.style.display = 'block';
