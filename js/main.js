@@ -97,8 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dynamicGrids = document.querySelectorAll('.dynamic-grid');
     const dynamicBlogGrids = document.querySelectorAll('.dynamic-blog-grid');
     const blogGrid = document.getElementById('homepage-blog-grid');
-    const childPagesContainer = document.getElementById('dynamic-child-pages-container');
-    if (productGrids.length > 0 || dynamicGrids.length > 0 || blogGrid || dynamicBlogGrids.length > 0 || childPagesContainer) {
+    if (productGrids.length > 0 || dynamicGrids.length > 0 || blogGrid || dynamicBlogGrids.length > 0) {
         initDynamicContent();
     }
 
@@ -326,85 +325,144 @@ async function initDynamicContent() {
 
         // Render dynamic category grids on subpages
         const dynamicContainer = document.getElementById('dynamic-child-pages-container');
-        if (dynamicContainer) {
-            const pathInfo = window.location.pathname;
-            let pageSlug = null;
-            if (pathInfo.includes('uu-dai-theo-chuong-trinh')) pageSlug = 'uu-dai-theo-chuong-trinh';
-            else if (pathInfo.includes('uu-dai-theo-thuong-hieu')) pageSlug = 'uu-dai-theo-thuong-hieu';
-            else if (pathInfo.includes('san-pham-theo-nhu-cau')) pageSlug = 'san-pham-theo-nhu-cau';
+        const pathInfo = window.location.pathname;
+        let pageSlug = null;
+        if (pathInfo.includes('uu-dai-theo-chuong-trinh')) pageSlug = 'uu-dai-theo-chuong-trinh';
+        else if (pathInfo.includes('uu-dai-theo-thuong-hieu')) pageSlug = 'uu-dai-theo-thuong-hieu';
+        else if (pathInfo.includes('san-pham-theo-nhu-cau')) pageSlug = 'san-pham-theo-nhu-cau';
 
-            if (pageSlug) {
-                // Load all child pages
-                let allChildPages = [];
-                if (index.child_pages) {
-                    const cpResults = await Promise.allSettled(
-                        index.child_pages.map(path => fetchJSON(`/data/${path}`).then(data => {
-                            if (data) data._slug = path.split('/').pop().replace('.json', '').replace(/\?.*$/, '');
-                            return data;
-                        }))
-                    );
-                    allChildPages = cpResults
-                        .filter(r => r.status === 'fulfilled' && r.value)
-                        .map(r => r.value)
-                        .filter(p => p.visible !== false && p.parent_page === pageSlug);
-                }
+        // Update dropdowns dynamically for all pages
+        const allChildPagesDict = {};
+        if (index.child_pages) {
+            const cpResults = await Promise.allSettled(
+                index.child_pages.map(path => fetchJSON(`/data/${path}`).then(data => {
+                    if (data) data._slug = path.split('/').pop().replace('.json', '').replace(/\?.*$/, '');
+                    return data;
+                }))
+            );
+            cpResults
+                .filter(r => r.status === 'fulfilled' && r.value)
+                .map(r => r.value)
+                .filter(p => p.visible !== false)
+                .forEach(p => {
+                    if (!allChildPagesDict[p.parent_page]) allChildPagesDict[p.parent_page] = [];
+                    allChildPagesDict[p.parent_page].push(p);
+                });
+        }
 
-                dynamicContainer.innerHTML = ''; // clear loading text
+        window._allProductsGlobal = allProducts;
+        window._allChildPagesDictGlobal = allChildPagesDict;
+        window._pageSlugGlobal = pageSlug;
 
-                if (allChildPages.length === 0) {
-                    dynamicContainer.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--gold-light);">Hiện chưa có chuyên mục nào.</div>';
-                } else {
-                    allChildPages.forEach(cp => {
-                        // find products for this child page
-                        const cpProducts = allProducts.filter(p => {
-                            if (!p.child_pages) return false;
-                            const cpIds = Array.isArray(p.child_pages) ? p.child_pages : [p.child_pages];
-                            return cpIds.includes(cp._slug);
+        // Dynamically update dropdowns in the nav menu
+        document.querySelectorAll('.nav-item-dropdown').forEach(dropdown => {
+            const link = dropdown.querySelector('.nav-link');
+            if (link) {
+                const href = link.getAttribute('href');
+                let parentSlug = null;
+                if (href.includes('uu-dai-theo-chuong-trinh')) parentSlug = 'uu-dai-theo-chuong-trinh';
+                else if (href.includes('uu-dai-theo-thuong-hieu')) parentSlug = 'uu-dai-theo-thuong-hieu';
+                else if (href.includes('san-pham-theo-nhu-cau')) parentSlug = 'san-pham-theo-nhu-cau';
+
+                if (parentSlug && allChildPagesDict[parentSlug]) {
+                    const ul = dropdown.querySelector('.dropdown-menu');
+                    if (ul) {
+                        ul.innerHTML = '';
+                        allChildPagesDict[parentSlug].forEach(cp => {
+                            const li = document.createElement('li');
+                            const a = document.createElement('a');
+                            a.href = `/${parentSlug}/#${cp._slug}`;
+                            a.className = 'dropdown-link';
+                            a.textContent = cp.title;
+                            li.appendChild(a);
+                            ul.appendChild(li);
                         });
-
-                        // create section html
-                        const section = document.createElement('section');
-                        section.className = 'deal-section';
-                        section.id = cp._slug;
-
-                        const header = document.createElement('div');
-                        header.className = 'deal-section-header';
-
-                        // Default icon logic based on keywords
-                        let icon = '✨';
-                        if (cp.title.toLowerCase().includes('dưỡng')) icon = '💧';
-                        else if (cp.title.toLowerCase().includes('trang điểm')) icon = '💄';
-                        else if (cp.title.toLowerCase().includes('wellness') || cp.title.toLowerCase().includes('sức khỏe')) icon = '🌿';
-
-                        header.innerHTML = `
-                            <div class="deal-section-icon" aria-hidden="true">${icon}</div>
-                            <h2 class="deal-section-title">${cp.title}</h2>
-                            <span class="deal-section-count">${cp.description || 'Khám phá ưu đãi'}</span>
-                        `;
-                        section.appendChild(header);
-
-                        const grid = document.createElement('div');
-                        grid.className = 'deal-grid';
-                        
-                        if (cpProducts.length === 0) {
-                            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 20px; color: #888;">Chưa có sản phẩm.</div>';
-                        } else {
-                            cpProducts.forEach(product => {
-                                const div = document.createElement('div');
-                                div.innerHTML = createDealCard(product);
-                                grid.appendChild(div.firstElementChild);
-                            });
-                        }
-                        
-                        section.appendChild(grid);
-                        dynamicContainer.appendChild(section);
-                    });
+                    }
                 }
             }
+        });
+
+        if (dynamicContainer && pageSlug) {
+            window.renderChildPageContainer = function() {
+                let activeChildPages = window._allChildPagesDictGlobal[window._pageSlugGlobal] || [];
+                dynamicContainer.innerHTML = ''; // clear loading text
+    
+                const currentHash = window.location.hash ? window.location.hash.substring(1) : null;
+                
+                // Check if we are viewing a specific child page
+                const targetChildPage = currentHash ? activeChildPages.find(cp => cp._slug === currentHash) : null;
+    
+                if (targetChildPage) {
+                    // RENDER SELECTED CHILD PAGE INSTEAD OF PARENT
+                    const cpProducts = window._allProductsGlobal.filter(p => {
+                        if (!p.child_pages) return false;
+                        const cpIds = Array.isArray(p.child_pages) ? p.child_pages : [p.child_pages];
+                        return cpIds.includes(targetChildPage._slug);
+                    });
+    
+                    const section = document.createElement('section');
+                    section.className = 'deal-section';
+                    section.id = targetChildPage._slug;
+    
+                    const header = document.createElement('div');
+                    header.className = 'deal-section-header';
+    
+                    let icon = '✨';
+                    if (targetChildPage.title.toLowerCase().includes('dưỡng')) icon = '💧';
+                    else if (targetChildPage.title.toLowerCase().includes('trang điểm')) icon = '💄';
+                    else if (targetChildPage.title.toLowerCase().includes('wellness') || targetChildPage.title.toLowerCase().includes('sức khỏe')) icon = '🌿';
+    
+                    header.innerHTML = `
+                        <div class="deal-section-icon" aria-hidden="true">${icon}</div>
+                        <h2 class="deal-section-title">${targetChildPage.title}</h2>
+                        <span class="deal-section-count">${targetChildPage.description || 'Sản phẩm nổi bật'}</span>
+                    `;
+                    section.appendChild(header);
+    
+                    const grid = document.createElement('div');
+                    grid.className = 'deal-grid';
+                    
+                    if (cpProducts.length === 0) {
+                        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 20px; color: #888;">Chưa có sản phẩm.</div>';
+                    } else {
+                        cpProducts.forEach(product => {
+                            const div = document.createElement('div');
+                            div.innerHTML = createDealCard(product);
+                            grid.appendChild(div.firstElementChild);
+                        });
+                    }
+                    section.appendChild(grid);
+                    dynamicContainer.appendChild(section);
+    
+                } else {
+                    // RENDER ENTIRE PARENT PAGE GRID
+                    const parentProducts = window._allProductsGlobal.filter(p => p.display_pages && Array.isArray(p.display_pages) && p.display_pages.includes(window._pageSlugGlobal));
+    
+                    const section = document.createElement('section');
+                    section.className = 'deal-section';
+    
+                    const grid = document.createElement('div');
+                    grid.className = 'deal-grid';
+                    
+                    if (parentProducts.length === 0) {
+                        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 20px; color: #888;">Chưa có sản phẩm.</div>';
+                    } else {
+                        parentProducts.forEach(product => {
+                            const div = document.createElement('div');
+                            div.innerHTML = createDealCard(product);
+                            grid.appendChild(div.firstElementChild);
+                        });
+                    }
+                    section.appendChild(grid);
+                    dynamicContainer.appendChild(section);
+                }
+            };
+            window.renderChildPageContainer();
         }
 
         // Fallback for any remaining static dynamic-grid definitions
         document.querySelectorAll('.dynamic-grid').forEach(grid => {
+            if (grid.closest('#dynamic-child-pages-container')) return; // Skip if inside dynamic container
             const cat = grid.getAttribute('data-category');
             const vendor = grid.getAttribute('data-vendor');
             const badge = grid.getAttribute('data-badge');
@@ -680,6 +738,11 @@ function handleRoute() {
         if (detailView) {
             detailView.style.display = 'none';
             detailView.innerHTML = ''; // cleanup
+        }
+        
+        // Trigger child page re-render if it is registered on this page
+        if (typeof window.renderChildPageContainer === 'function') {
+            window.renderChildPageContainer();
         }
     }
 }
