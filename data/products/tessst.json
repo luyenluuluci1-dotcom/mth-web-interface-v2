@@ -16,5 +16,8 @@
     "uu-dai-theo-thuong-hieu",
     "san-pham-theo-nhu-cau"
   ],
+  "child_pages": [
+    "Deal Hoi Cuoi Tuan"
+  ],
   "sort_order": 2
 }
