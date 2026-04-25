@@ -99,6 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const blogGrid = document.getElementById('homepage-blog-grid');
     const dynamicChildPagesContainer = document.getElementById('dynamic-child-pages-container');
 
+    // Unconditionally fetch and build the nav dropdowns so they appear on ALL pages (even product pages)
+    initNavDropdowns();
+
     if (productGrids.length > 0 || dynamicGrids.length > 0 || blogGrid || dynamicBlogGrids.length > 0 || dynamicChildPagesContainer) {
         initDynamicContent();
     }
@@ -114,6 +117,63 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// =============================================================================
+// NAV DROPDOWNS MODULE
+// =============================================================================
+async function initNavDropdowns() {
+    try {
+        const index = await fetchJSON('/data/content-index.json');
+        if (!index || !index.child_pages) return;
+
+        const allChildPagesDict = {};
+        const cpResults = await Promise.allSettled(
+            index.child_pages.map(path => fetchJSON(`/data/${path}`).then(data => {
+                if (data) data._slug = path.split('/').pop().replace('.json', '').replace(/\?.*$/, '');
+                return data;
+            }))
+        );
+        cpResults
+            .filter(r => r.status === 'fulfilled' && r.value)
+            .map(r => r.value)
+            .filter(p => p.visible !== false)
+            .forEach(p => {
+                if (!allChildPagesDict[p.parent_page]) allChildPagesDict[p.parent_page] = [];
+                allChildPagesDict[p.parent_page].push(p);
+            });
+
+        window._allChildPagesDictGlobal = allChildPagesDict;
+
+        // Dynamically update dropdowns in the nav menu
+        document.querySelectorAll('.nav-item-dropdown').forEach(dropdown => {
+            const link = dropdown.querySelector('.nav-link');
+            if (link) {
+                const href = link.getAttribute('href');
+                let parentSlug = null;
+                if (href.includes('uu-dai-theo-chuong-trinh')) parentSlug = 'uu-dai-theo-chuong-trinh';
+                else if (href.includes('uu-dai-theo-thuong-hieu')) parentSlug = 'uu-dai-theo-thuong-hieu';
+                else if (href.includes('san-pham-theo-nhu-cau')) parentSlug = 'san-pham-theo-nhu-cau';
+
+                if (parentSlug && allChildPagesDict[parentSlug]) {
+                    const ul = dropdown.querySelector('.dropdown-menu');
+                    if (ul) {
+                        ul.innerHTML = '';
+                        allChildPagesDict[parentSlug].forEach(cp => {
+                            const li = document.createElement('li');
+                            const a = document.createElement('a');
+                            a.href = `/${parentSlug}/#${cp._slug}`;
+                            a.className = 'dropdown-link';
+                            a.textContent = cp.title;
+                            li.appendChild(a);
+                            ul.appendChild(li);
+                        });
+                    }
+                }
+            }
+        });
+    } catch (err) {
+        console.error("Error initializing nav dropdowns", err);
+    }
+}
 
 // =============================================================================
 // BANNER CAROUSEL MODULE
@@ -333,60 +393,17 @@ async function initDynamicContent() {
         else if (pathInfo.includes('uu-dai-theo-thuong-hieu')) pageSlug = 'uu-dai-theo-thuong-hieu';
         else if (pathInfo.includes('san-pham-theo-nhu-cau')) pageSlug = 'san-pham-theo-nhu-cau';
 
-        // Update dropdowns dynamically for all pages
-        const allChildPagesDict = {};
-        if (index.child_pages) {
-            const cpResults = await Promise.allSettled(
-                index.child_pages.map(path => fetchJSON(`/data/${path}`).then(data => {
-                    if (data) data._slug = path.split('/').pop().replace('.json', '').replace(/\?.*$/, '');
-                    return data;
-                }))
-            );
-            cpResults
-                .filter(r => r.status === 'fulfilled' && r.value)
-                .map(r => r.value)
-                .filter(p => p.visible !== false)
-                .forEach(p => {
-                    if (!allChildPagesDict[p.parent_page]) allChildPagesDict[p.parent_page] = [];
-                    allChildPagesDict[p.parent_page].push(p);
-                });
+        // Wait for Nav Dropdowns to populate so we have _allChildPagesDictGlobal
+        if (window._navDropdownsPromise) {
+            await window._navDropdownsPromise;
         }
 
         window._allProductsGlobal = allProducts;
-        window._allChildPagesDictGlobal = allChildPagesDict;
         window._pageSlugGlobal = pageSlug;
-
-        // Dynamically update dropdowns in the nav menu
-        document.querySelectorAll('.nav-item-dropdown').forEach(dropdown => {
-            const link = dropdown.querySelector('.nav-link');
-            if (link) {
-                const href = link.getAttribute('href');
-                let parentSlug = null;
-                if (href.includes('uu-dai-theo-chuong-trinh')) parentSlug = 'uu-dai-theo-chuong-trinh';
-                else if (href.includes('uu-dai-theo-thuong-hieu')) parentSlug = 'uu-dai-theo-thuong-hieu';
-                else if (href.includes('san-pham-theo-nhu-cau')) parentSlug = 'san-pham-theo-nhu-cau';
-
-                if (parentSlug && allChildPagesDict[parentSlug]) {
-                    const ul = dropdown.querySelector('.dropdown-menu');
-                    if (ul) {
-                        ul.innerHTML = '';
-                        allChildPagesDict[parentSlug].forEach(cp => {
-                            const li = document.createElement('li');
-                            const a = document.createElement('a');
-                            a.href = `/${parentSlug}/#${cp._slug}`;
-                            a.className = 'dropdown-link';
-                            a.textContent = cp.title;
-                            li.appendChild(a);
-                            ul.appendChild(li);
-                        });
-                    }
-                }
-            }
-        });
 
         if (dynamicContainer && pageSlug) {
             window.renderChildPageContainer = function() {
-                let activeChildPages = window._allChildPagesDictGlobal[window._pageSlugGlobal] || [];
+                let activeChildPages = window._allChildPagesDictGlobal ? (window._allChildPagesDictGlobal[window._pageSlugGlobal] || []) : [];
                 dynamicContainer.innerHTML = ''; // clear loading text
     
                 const currentHash = window.location.hash ? window.location.hash.substring(1) : null;
