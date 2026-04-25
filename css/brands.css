@@ -54,6 +54,14 @@
   width: 100%;
   height: auto;
   pointer-events: none;
+  /* Graceful degradation: hide broken image icon but keep space */
+  min-height: 24px;
+}
+
+/* Hide broken images gracefully */
+.brand-logo[src=""],
+.brand-logo:not([src]) {
+  visibility: hidden;
 }
 
 @media (max-width: 768px) {

@@ -216,8 +216,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;  /* 44px minimum touch target per WCAG */
+  height: 44px; /* 44px minimum touch target per WCAG */
   cursor: pointer;
   z-index: 200;
   background: none;
@@ -279,6 +279,11 @@
     font-size: var(--font-size-xs);
     padding: 0.5rem 0.75rem;
     letter-spacing: 0.5px;
+    /* Ensure text wraps to max 2 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   /* Navbar shrinks */
@@ -305,9 +310,16 @@
     display: none;
   }
 
-  /* Icons shrink */
+  /* Icons: enlarge touch targets on mobile */
   .navbar-actions {
-    gap: 0.75rem;
+    gap: 0.25rem;
+  }
+
+  /* Ensure each action button is large enough to tap comfortably */
+  .action-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.5rem;
   }
 
   /* ===== MOBILE DRAWER MENU ===== */

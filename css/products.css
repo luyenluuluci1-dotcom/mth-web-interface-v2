@@ -192,16 +192,19 @@
   }
   .section-header {
     margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
   .section-title {
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-xl);
   }
   .section-link {
     font-size: var(--font-size-xs);
+    white-space: nowrap;
   }
   /* On mobile: always show a subtle buy button instead of hover overlay */
   .product-action-overlay {
@@ -223,6 +226,22 @@
 }
 
 @media (max-width: 480px) {
+  .products-section {
+    padding: 2rem 0;
+  }
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+  }
+  .section-title {
+    font-size: var(--font-size-lg);
+  }
+  .section-link {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+  }
   .products-grid {
     gap: 0.75rem;
   }
