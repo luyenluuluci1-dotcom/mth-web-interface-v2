@@ -7,12 +7,17 @@
   "description": "dfghjfghbnxcv",
   "image": "/images/uploads/thumb_1.png",
   "badge": "",
+  "shopee_link": "",
+  "detail_description": "",
   "visible": true,
   "display_pages": [
     "homepage",
     "uu-dai-theo-chuong-trinh",
     "uu-dai-theo-thuong-hieu",
     "san-pham-theo-nhu-cau"
+  ],
+  "child_pages": [
+    "Deal Hoi Cuoi Tuan"
   ],
   "sort_order": 4
 }
