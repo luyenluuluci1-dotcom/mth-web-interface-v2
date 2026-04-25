@@ -12,11 +12,16 @@
     "products/serum-shiseido-ultimune.json?v=1777023209474.9602",
     "products/son-bobbi-brown-luxe.json?v=1776854910391.6482",
     "products/test-01.json?v=1777029742567.5698",
-    "products/test-1.json?v=1776854910299.3125"
+    "products/test-1.json?v=1776854910299.3125",
+    "products/sản-phẩm-test-live-website.json?v=1777101037293"
   ],
   "blog": [
     "blog/2026-04-12-wellness-supplements.json?v=1776854910389.548",
     "blog/2026-04-15-clean-girl-makeup.json?v=1776854910390.0781",
     "blog/2026-04-19-skincare-routine.json?v=1776854910390.0781"
+  ],
+  "child_pages": [
+    "child_pages/flash-sale-demo.json?v=1777101037293",
+    "child_pages/test-category-browser.json?v=1777101037293"
   ]
 }
