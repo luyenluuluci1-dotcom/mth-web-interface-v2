@@ -13,7 +13,11 @@
   "display_pages": [
     "homepage",
     "san-pham-theo-nhu-cau",
-    "uu-dai-theo-chuong-trinh"
+    "uu-dai-theo-chuong-trinh",
+    "uu-dai-theo-thuong-hieu"
+  ],
+  "child_pages": [
+    "test_01"
   ],
   "sort_order": 3
 }
