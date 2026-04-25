@@ -3,7 +3,8 @@
    ========================================================================== */
 
 .products-section {
-  padding: 6rem 0;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
   background-color: var(--color-bg-base);
 }
 
@@ -188,7 +189,8 @@
 
 @media (max-width: 768px) {
   .products-section {
-    padding: 3rem 0;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
   .section-header {
     margin-bottom: 1.5rem;

@@ -106,7 +106,8 @@
 
 /* 3. Page Body Layout */
 .inner-page-body {
-  padding: 3rem 0 5rem;
+  padding-top: 3rem;
+  padding-bottom: 5rem;
   background-color: var(--color-bg-base);
 }
 
