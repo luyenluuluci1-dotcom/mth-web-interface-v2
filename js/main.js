@@ -225,13 +225,13 @@ async function initBannerCarousel() {
     if (nextBtn) nextBtn.addEventListener('click', nextSlide);
 
     // Auto-advance
-    function startAutoPlay() {
-        autoPlayInterval = setInterval(nextSlide, 5000);
+    function startAutoPlay(delay = 6000) {
+        autoPlayInterval = setInterval(nextSlide, delay);
     }
 
-    function resetAutoPlay() {
+    function resetAutoPlay(delay = 10000) {
         if (autoPlayInterval) clearInterval(autoPlayInterval);
-        startAutoPlay();
+        startAutoPlay(delay);
     }
 
     // Pause on hover
@@ -973,14 +973,12 @@ async function initAnnouncementBar() {
 
 /**
  * Fetch and parse a JSON file. Returns null on failure.
+ * Bắt buộc tải mới tất cả file JSON để tránh lỗi cache
  */
 async function fetchJSON(url) {
     try {
-        let fetchUrl = url;
-        // Bắt buộc tải mới index file để nhận biết các file được update version
-        if (url.includes('content-index.json')) {
-            fetchUrl = `${url}?_t=${new Date().getTime()}`;
-        }
+        const timestamp = new Date().getTime();
+        const fetchUrl = url.includes('?') ? `${url}&_t=${timestamp}` : `${url}?_t=${timestamp}`;
         const res = await fetch(fetchUrl);
         if (!res.ok) return null;
         return await res.json();
