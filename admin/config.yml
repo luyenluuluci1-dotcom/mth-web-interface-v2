@@ -34,7 +34,29 @@ collections:
       - {label: "Hiển thị", name: "visible", widget: "boolean", default: true, hint: "Bật/tắt hiển thị bài viết"}
       - {label: "Hiển thị ở trang chủ", name: "display_on_homepage", widget: "boolean", default: false, hint: "Có hiển thị ở phần Blog trang chủ?"}
 
-  # 2. Quản lý Sản phẩm
+  # 2. Quản lý Trang Con
+  - name: "child_pages"
+    label: "Trang Con (Sub-pages)"
+    folder: "data/child_pages"
+    create: true
+    extension: "json"
+    format: "json"
+    slug: "{{slug}}"
+    fields:
+      - {label: "Tên trang con", name: "title", widget: "string", hint: "Ví dụ: Flash Sale Mùa Hè"}
+      - label: "Trang nhánh (Parent Page)"
+        name: "parent_page"
+        widget: "select"
+        options:
+          - {label: "Ưu đãi theo chương trình", value: "uu-dai-theo-chuong-trinh"}
+          - {label: "Ưu đãi theo thương hiệu", value: "uu-dai-theo-thuong-hieu"}
+          - {label: "Sản phẩm theo nhu cầu", value: "san-pham-theo-nhu-cau"}
+          - {label: "Blog", value: "blog"}
+        hint: "Trang nhánh chứa trang con này"
+      - {label: "Mô tả", name: "description", widget: "text", required: false}
+      - {label: "Hiển thị", name: "visible", widget: "boolean", default: true}
+
+  # 3. Quản lý Sản phẩm
   - name: "products"
     label: "Sản phẩm"
     folder: "data/products"
@@ -53,7 +75,7 @@ collections:
       - {label: "Link Shopee", name: "shopee_link", widget: "string", required: false, hint: "Link sản phẩm trên Shopee. Nếu có, khách bấm Đặt Hàng sẽ mở Shopee. Nếu để trống, khách sẽ điền biểu mẫu đặt hàng."}
       - {label: "Mô tả chi tiết", name: "detail_description", widget: "markdown", required: false, hint: "Mô tả chi tiết sản phẩm (thành phần, cách dùng, lưu ý...). Hiển thị ở trang chi tiết sản phẩm."}
       - {label: "Hiển thị", name: "visible", widget: "boolean", default: true, hint: "Bật/tắt hiển thị sản phẩm trên website"}
-      - label: "Hiển thị tại các trang"
+      - label: "Hiển thị tại các trang (Trang nhánh)"
         name: "display_pages"
         widget: "select"
         multiple: true
@@ -62,7 +84,17 @@ collections:
           - {label: "Ưu đãi theo chương trình", value: "uu-dai-theo-chuong-trinh"}
           - {label: "Ưu đãi theo thương hiệu", value: "uu-dai-theo-thuong-hieu"}
           - {label: "Sản phẩm theo nhu cầu", value: "san-pham-theo-nhu-cau"}
-        hint: "Chọn các trang mà sản phẩm này sẽ hiển thị"
+        hint: "Chọn các trang nhánh mà sản phẩm này sẽ hiển thị"
+      - label: "Hiển thị tại Trang con"
+        name: "child_pages"
+        widget: "relation"
+        collection: "child_pages"
+        value_field: "slug"
+        search_fields: ["title", "parent_page"]
+        display_fields: ["parent_page", "title"]
+        multiple: true
+        required: false
+        hint: "Chọn trang con (chuyên mục hẹp). Ví dụ: Flash Sale"
       - {label: "Thứ tự sắp xếp", name: "sort_order", widget: "number", default: 0, hint: "Số nhỏ hiển thị trước"}
 
   # 3. Quản lý Banner trang chủ

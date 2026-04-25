@@ -20,11 +20,12 @@ try {
     const contentIndex = {
         banners: getJsonFiles('banners'),
         products: getJsonFiles('products'),
-        blog: getJsonFiles('blog')
+        blog: getJsonFiles('blog'),
+        child_pages: getJsonFiles('child_pages')
     };
 
     fs.writeFileSync(indexFile, JSON.stringify(contentIndex, null, 2));
-    console.log(`Successfully updated ${indexFile} with ${contentIndex.products.length} products, ${contentIndex.blog.length} blog posts, and ${contentIndex.banners.length} banners.`);
+    console.log(`Successfully updated ${indexFile} with ${contentIndex.products.length} products, ${contentIndex.blog.length} blog posts, ${contentIndex.child_pages ? contentIndex.child_pages.length : 0} child pages, and ${contentIndex.banners.length} banners.`);
 } catch (error) {
     console.error('Error generating content-index.json:', error);
     process.exit(1);

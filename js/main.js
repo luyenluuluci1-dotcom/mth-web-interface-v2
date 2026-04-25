@@ -324,6 +324,85 @@ async function initDynamicContent() {
         });
 
         // Render dynamic category grids on subpages
+        const dynamicContainer = document.getElementById('dynamic-child-pages-container');
+        if (dynamicContainer) {
+            const pathInfo = window.location.pathname;
+            let pageSlug = null;
+            if (pathInfo.includes('uu-dai-theo-chuong-trinh')) pageSlug = 'uu-dai-theo-chuong-trinh';
+            else if (pathInfo.includes('uu-dai-theo-thuong-hieu')) pageSlug = 'uu-dai-theo-thuong-hieu';
+            else if (pathInfo.includes('san-pham-theo-nhu-cau')) pageSlug = 'san-pham-theo-nhu-cau';
+
+            if (pageSlug) {
+                // Load all child pages
+                let allChildPages = [];
+                if (index.child_pages) {
+                    const cpResults = await Promise.allSettled(
+                        index.child_pages.map(path => fetchJSON(`/data/${path}`).then(data => {
+                            if (data) data._slug = path.split('/').pop().replace('.json', '').replace(/\?.*$/, '');
+                            return data;
+                        }))
+                    );
+                    allChildPages = cpResults
+                        .filter(r => r.status === 'fulfilled' && r.value)
+                        .map(r => r.value)
+                        .filter(p => p.visible !== false && p.parent_page === pageSlug);
+                }
+
+                dynamicContainer.innerHTML = ''; // clear loading text
+
+                if (allChildPages.length === 0) {
+                    dynamicContainer.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--gold-light);">Hiện chưa có chuyên mục nào.</div>';
+                } else {
+                    allChildPages.forEach(cp => {
+                        // find products for this child page
+                        const cpProducts = allProducts.filter(p => {
+                            if (!p.child_pages) return false;
+                            const cpIds = Array.isArray(p.child_pages) ? p.child_pages : [p.child_pages];
+                            return cpIds.includes(cp._slug);
+                        });
+
+                        // create section html
+                        const section = document.createElement('section');
+                        section.className = 'deal-section';
+                        section.id = cp._slug;
+
+                        const header = document.createElement('div');
+                        header.className = 'deal-section-header';
+
+                        // Default icon logic based on keywords
+                        let icon = '✨';
+                        if (cp.title.toLowerCase().includes('dưỡng')) icon = '💧';
+                        else if (cp.title.toLowerCase().includes('trang điểm')) icon = '💄';
+                        else if (cp.title.toLowerCase().includes('wellness') || cp.title.toLowerCase().includes('sức khỏe')) icon = '🌿';
+
+                        header.innerHTML = `
+                            <div class="deal-section-icon" aria-hidden="true">${icon}</div>
+                            <h2 class="deal-section-title">${cp.title}</h2>
+                            <span class="deal-section-count">${cp.description || 'Khám phá ưu đãi'}</span>
+                        `;
+                        section.appendChild(header);
+
+                        const grid = document.createElement('div');
+                        grid.className = 'deal-grid';
+                        
+                        if (cpProducts.length === 0) {
+                            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 20px; color: #888;">Chưa có sản phẩm.</div>';
+                        } else {
+                            cpProducts.forEach(product => {
+                                const div = document.createElement('div');
+                                div.innerHTML = createDealCard(product);
+                                grid.appendChild(div.firstElementChild);
+                            });
+                        }
+                        
+                        section.appendChild(grid);
+                        dynamicContainer.appendChild(section);
+                    });
+                }
+            }
+        }
+
+        // Fallback for any remaining static dynamic-grid definitions
         document.querySelectorAll('.dynamic-grid').forEach(grid => {
             const cat = grid.getAttribute('data-category');
             const vendor = grid.getAttribute('data-vendor');
