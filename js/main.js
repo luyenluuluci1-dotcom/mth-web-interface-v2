@@ -97,7 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const dynamicGrids = document.querySelectorAll('.dynamic-grid');
     const dynamicBlogGrids = document.querySelectorAll('.dynamic-blog-grid');
     const blogGrid = document.getElementById('homepage-blog-grid');
-    if (productGrids.length > 0 || dynamicGrids.length > 0 || blogGrid || dynamicBlogGrids.length > 0) {
+    const childPagesContainer = document.getElementById('dynamic-child-pages-container');
+    if (productGrids.length > 0 || dynamicGrids.length > 0 || blogGrid || dynamicBlogGrids.length > 0 || childPagesContainer) {
         initDynamicContent();
     }
 
