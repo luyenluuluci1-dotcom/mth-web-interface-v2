@@ -95,10 +95,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     const productGrids = document.querySelectorAll('.products-grid[data-section]');
     const dynamicGrids = document.querySelectorAll('.dynamic-grid');
+    const dynamicBlogGrids = document.querySelectorAll('.dynamic-blog-grid');
     const blogGrid = document.getElementById('homepage-blog-grid');
-    if (productGrids.length > 0 || dynamicGrids.length > 0 || blogGrid) {
+    if (productGrids.length > 0 || dynamicGrids.length > 0 || blogGrid || dynamicBlogGrids.length > 0) {
         initDynamicContent();
     }
+
+    // =========================================================================
+    // 6. ANNOUNCEMENT BAR — Dynamic from CMS
+    // =========================================================================
+    initAnnouncementBar();
     
     // Initial Route Check
     if (typeof handleRoute === 'function') {
@@ -358,30 +364,49 @@ async function initDynamicContent() {
         });
 
         // Load and render blog posts
-        const blogGrid = document.getElementById('homepage-blog-grid');
-        if (blogGrid && index.blog) {
+        let allBlogPosts = [];
+        if (index.blog) {
             const blogResults = await Promise.allSettled(
                 index.blog.map(path => fetchJSON(`/data/${path}`).then(data => {
-                    if (data) data._slug = path.split('/').pop().replace('.json', '');
+                    if (data) data._slug = path.split('/').pop().replace('.json', '').replace(/\?.*$/, '');
                     return data;
                 }))
             );
-            const blogPosts = blogResults
+            allBlogPosts = blogResults
                 .filter(r => r.status === 'fulfilled' && r.value)
                 .map(r => r.value)
-                .filter(b => b.visible !== false && b.display_on_homepage === true)
-                .slice(0, 3); // Max 3 blog posts
+                .filter(b => b.visible !== false);
+        }
 
-            if (blogPosts.length === 0) {
+        // Homepage blog grid (max 3, only display_on_homepage)
+        const blogGrid = document.getElementById('homepage-blog-grid');
+        if (blogGrid) {
+            const homepagePosts = allBlogPosts
+                .filter(b => b.display_on_homepage === true)
+                .slice(0, 3);
+
+            if (homepagePosts.length === 0) {
                 const section = blogGrid.closest('.blog-section');
                 if (section) section.style.display = 'none';
-                return;
+            } else {
+                homepagePosts.forEach(post => {
+                    blogGrid.appendChild(createBlogCard(post));
+                });
             }
-
-            blogPosts.forEach(post => {
-                blogGrid.appendChild(createBlogCard(post));
-            });
         }
+
+        // Blog subpage grids (dynamic-blog-grid with data-category)
+        document.querySelectorAll('.dynamic-blog-grid').forEach(grid => {
+            const cat = grid.getAttribute('data-category');
+            let filtered = allBlogPosts;
+            if (cat) {
+                filtered = filtered.filter(b => b.category === cat);
+            }
+            grid.innerHTML = '';
+            filtered.forEach(post => {
+                grid.appendChild(createBlogInnerCard(post));
+            });
+        });
     } catch (err) {
         console.warn('Dynamic content loading failed:', err);
     }
@@ -480,6 +505,40 @@ function createBlogCard(post) {
     return card;
 }
 
+/**
+ * Create a blog inner card for blog subpage grids.
+ */
+function createBlogInnerCard(post) {
+    let dateStr = '';
+    if (post.date) {
+        const d = new Date(post.date);
+        const months = ['Tháng 01', 'Tháng 02', 'Tháng 03', 'Tháng 04', 'Tháng 05', 'Tháng 06',
+                        'Tháng 07', 'Tháng 08', 'Tháng 09', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
+        dateStr = `${d.getDate()} ${months[d.getMonth()]}, ${d.getFullYear()}`;
+    }
+
+    const card = document.createElement('article');
+    card.className = 'blog-inner-card';
+    card.innerHTML = `
+        <div class="blog-inner-image-wrapper">
+            <span class="blog-inner-category">${post.category || ''}</span>
+            <a href="#/collections/blog/entries/${post._slug}">
+                <img src="${post.thumbnail || ''}" alt="${post.title}" class="blog-inner-image" loading="lazy">
+            </a>
+        </div>
+        <div class="blog-inner-body">
+            <a href="#/collections/blog/entries/${post._slug}" style="text-decoration:none;color:inherit;">
+                <h3 class="blog-inner-title">${post.title}</h3>
+            </a>
+            <p class="blog-inner-excerpt">${post.excerpt || ''}</p>
+        </div>
+        <div class="blog-inner-footer">
+            <span class="blog-inner-date">${dateStr}</span>
+            <span class="blog-inner-readtime">5 phút đọc</span>
+        </div>
+    `;
+    return card;
+}
 
 // =============================================================================
 // ROUTER & CARDS MODULE
@@ -879,6 +938,33 @@ function simpleMarkdown(text) {
         html = '<p>' + html + '</p>';
     }
     return html;
+}
+
+// =============================================================================
+// ANNOUNCEMENT BAR — Dynamic CMS Content
+// =============================================================================
+async function initAnnouncementBar() {
+    try {
+        const data = await fetchJSON('/data/announcement-bar.json');
+        if (!data || data.visible === false) return;
+
+        const bar = document.querySelector('.announcement-bar');
+        if (!bar) return;
+
+        let content = data.text || '';
+        if (data.highlight) {
+            content += ` <span class="announcement-highlight">${data.highlight}</span>`;
+        }
+
+        if (data.link && data.link.trim() !== '') {
+            bar.innerHTML = `<a href="${data.link}" style="color:inherit;text-decoration:none;"><span>${content}</span></a>`;
+            bar.style.cursor = 'pointer';
+        } else {
+            bar.innerHTML = `<span>${content}</span>`;
+        }
+    } catch (err) {
+        console.warn('Announcement bar load failed:', err);
+    }
 }
 
 // =============================================================================

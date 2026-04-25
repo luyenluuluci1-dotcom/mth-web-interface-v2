@@ -88,6 +88,15 @@ collections:
   - name: "settings"
     label: "Cài đặt Website"
     files:
+      - label: "Thanh thông báo (Announcement Bar)"
+        name: "announcement_bar"
+        file: "data/announcement-bar.json"
+        fields:
+          - {label: "Nội dung thông báo", name: "text", widget: "string", default: "ĐẶC QUYỀN MỚI TỪ MAI TRINH: TẶNG KÈM VOUCHER FREE SHIP DÀNH CHO CÁC SẢN PHẨM"}
+          - {label: "Từ khóa nổi bật", name: "highlight", widget: "string", required: false, default: "SKINCARE", hint: "Từ sẽ được tô đậm/nổi bật trong thông báo"}
+          - {label: "Link điều hướng", name: "link", widget: "string", required: false, hint: "URL điều hướng khi bấm vào thông báo (để trống nếu không cần)"}
+          - {label: "Hiển thị", name: "visible", widget: "boolean", default: true}
+
       - label: "Cấu hình các mục hiển thị"
         name: "sections_config"
         file: "data/sections-config.json"

@@ -5,12 +5,16 @@
 
 :root {
   /* =========================================================================
-   * 1. COLORS
+   * 1. COLORS — Wild Strawberry Pink Palette
    * ========================================================================= */
-  /* Primary Brand Color (Coral / Rose typical in beauty, inspired by Hannah Olala) */
-  --color-primary: #E29587; 
-  --color-primary-hover: #D17F72;
-  --color-primary-light: #FCECE9;
+  /* Primary Brand Color (Wild Strawberry — vivid, playful, premium beauty) */
+  --color-primary: #F94785;
+  --color-primary-hover: #E03370;
+  --color-primary-light: #FFF0F5;
+
+  /* Accent (Soft Periwinkle — whimsical complement) */
+  --color-accent: #B093EF;
+  --color-accent-light: #EDE7FB;
 
   /* Neutrals (Slate scale for premium contrast & typography) */
   --color-slate-900: #0f172a; /* High contrast text / Headings */
@@ -20,12 +24,13 @@
   --color-slate-50:  #f8fafc; /* Subtle backgrounds */
   
   --color-bg-base: #ffffff;
-  --color-bg-glass: rgba(255, 255, 255, 0.85); /* For floatings & fixed nav */
+  --color-bg-soft: #FFFCFF; /* Snow — barely-there warmth */
+  --color-bg-glass: rgba(255, 252, 255, 0.88); /* Glass with Snow tint */
 
   /* Semantic */
-  --color-sale-red: #D32F2F; 
+  --color-sale-red: #F94785;
   --color-hot-gold: #FFB300; 
-  --gold-light: #bc995a;
+  --gold-light: #B093EF;
 
   /* =========================================================================
    * 2. TYPOGRAPHY
@@ -73,6 +78,6 @@
   --transition-flow: 500ms cubic-bezier(0.22, 1, 0.36, 1);
   
   /* Focus States for Accessibility */
-  --focus-ring-color: rgba(226, 149, 135, 0.5); /* Primary with opacity */
+  --focus-ring-color: rgba(249, 71, 133, 0.4); /* Wild Strawberry with opacity */
   --focus-ring-offset: 2px;
 }
