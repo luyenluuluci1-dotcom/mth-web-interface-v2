@@ -10,6 +10,14 @@
   "shopee_link": "https://shopee.vn",
   "detail_description": "## Thành phần nổi bật\n\n- **ImuGeneration Technology™**: Công nghệ độc quyền giúp tăng cường hàng rào miễn dịch tự nhiên của da\n- **Reishi Mushroom Extract**: Chiết xuất nấm Linh Chi giàu chất chống oxy hóa\n- **Iris Root Extract**: Chiết xuất rễ hoa diên vĩ giúp phục hồi da\n\n## Cách sử dụng\n\nSau bước toner, lấy 2-3 giọt serum ra lòng bàn tay, nhẹ nhàng ấn lên toàn bộ khuôn mặt và cổ. Sử dụng sáng và tối.\n\n## Lưu ý\n\nBảo quản nơi khô ráo, tránh ánh nắng trực tiếp. Phù hợp mọi loại da.",
   "visible": true,
-  "display_pages": ["homepage", "san-pham-theo-nhu-cau", "uu-dai-theo-thuong-hieu"],
+  "display_pages": [
+    "homepage",
+    "san-pham-theo-nhu-cau",
+    "uu-dai-theo-thuong-hieu",
+    "uu-dai-theo-chuong-trinh"
+  ],
+  "child_pages": [
+    "Flash Sale Demo"
+  ],
   "sort_order": 1
 }
